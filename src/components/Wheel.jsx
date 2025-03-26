@@ -44,7 +44,12 @@ const Wheel = ({ config, size, setResult, slices }) => {
     const images = preloadIcons(slices);
     // Esperar que todas las imágenes se carguen
     const checkImagesLoaded = setInterval(() => {
-      if (Object.keys(images).length === slices.filter((slice) => slice.ico).length) {
+      if (
+        Object.keys(images).length ===
+        slices.filter((slice) => {
+          if (iconMap[slice.ico]) return slice.ico;
+        }).length
+      ) {
         clearInterval(checkImagesLoaded);
         setIconImages(images); // Guardar imágenes cargadas
       }

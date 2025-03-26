@@ -15,13 +15,13 @@ let escapp;
 
 const initialConfig = [
   [
-    { color: "red", label: "a", img: "" },
-    { color: "blue", label: "b", img: "" },
-    { color: "green", label: "c", img: "" },
-    { color: "yellow", label: "d", img: "" },
-    { color: "purple", label: "e", img: "" },
-    { color: "orange", label: "f", img: "" },
-    { color: "brown", label: "g", img: "" },
+    { color: "brown", label: "a", img: "", ico: "circle" },
+    { color: "red", label: "b", img: "", ico: "triangle" },
+    { color: "blue", label: "c", img: "", ico: "square" },
+    { color: "green", label: "d", img: "", ico: "pentagon" },
+    { color: "yellow", label: "e", img: "", ico: "star" },
+    { color: "purple", label: "f", img: "", ico: "hexagon" },
+    { color: "orange", label: "g", img: "", ico: "asdasd" },
   ],
   [
     { color: "red", label: "a", img: "" },
@@ -39,7 +39,7 @@ const initialConfig = [
     { color: "yellow", label: "d", img: "", ico: "pentagon" },
     { color: "purple", label: "e", img: "", ico: "star" },
     { color: "orange", label: "f", img: "", ico: "hexagon" },
-    { color: "brown", label: "g", img: "", icon: "asdasd" },
+    { color: "brown", label: "g", img: "", ico: "asdasd" },
   ],
 ];
 
@@ -102,25 +102,6 @@ export default function App() {
 
   function restoreState(er_state) {
     console.log("Restoring state", er_state);
-    if (typeof er_state !== "undefined" && er_state.puzzlesSolved.length > 0) {
-      let lastPuzzleSolved = Math.max.apply(null, er_state.puzzlesSolved);
-      if (lastPuzzleSolved >= GLOBAL_CONFIG.escapp.puzzleId) {
-        //puzzle superado, abrimos la caja fuerte
-        setScreen(KEYPAD_SCREEN);
-        setPrevScreen(KEYPAD_SCREEN);
-      } else {
-        //puzzle no superado, miramos en localStorage en qué pantalla estábamos
-        let localstateToRestore = LocalStorage.getSetting("app_state");
-        console.log("Restoring screen from local state", localstateToRestore);
-        if (localstateToRestore) {
-          setScreen(localstateToRestore.screen);
-          setPrevScreen(localstateToRestore.prevScreen);
-        }
-      }
-      setLoading(false);
-    } else {
-      restoreLocalState();
-    }
   }
 
   function saveState() {
