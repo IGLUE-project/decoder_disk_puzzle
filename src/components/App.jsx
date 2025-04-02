@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import "./../assets/scss/app.scss";
 import "./../assets/scss/modal.scss";
 
@@ -7,86 +6,133 @@ import { GLOBAL_CONFIG } from "../config/config.js";
 import * as I18n from "../vendors/I18n.js";
 import * as LocalStorage from "../vendors/Storage.js";
 
-import { CONTROL_PANEL_SCREEN, KEYPAD_SCREEN } from "../constants/constants.jsx";
-import MainScreen from "./MainScreen.jsx";
+import {
+  AREACOLOR,
+  CONTROL_PANEL_SCREEN,
+  ICONS,
+  KEYPAD_SCREEN,
+  THEME_IMAGES,
+  THEMES,
+  WHEELTYPE,
+} from "../constants/constants.jsx";
 import ControlPanel from "./ControlPanel.jsx";
+import MainScreen from "./MainScreen.jsx";
 
 let escapp;
 
-const initialConfig = [
-  [
-    { color: "brown", label: "a", img: "", ico: "circle" },
-    { color: "red", label: "b", img: "", ico: "triangle" },
-    { color: "blue", label: "c", img: "", ico: "square" },
-    { color: "green", label: "d", img: "", ico: "pentagon" },
-    { color: "yellow", label: "e", img: "", ico: "star" },
-    { color: "purple", label: "f", img: "", ico: "hexagon" },
-    { color: "orange", label: "g", img: "", ico: "asdasd" },
+const initialConfig = {
+  config: {
+    nWheels: 4,
+    theme: THEMES.ANCIENT,
+  },
+  wheels: [
+    {
+      type: "numbers",
+      length: 6,
+    },
+    {
+      type: WHEELTYPE.COLORED_SHAPES,
+      length: 6,
+    },
+    {
+      type: WHEELTYPE.LETTERS,
+      length: 6,
+      customWheel: [
+        { areaColor: "#ff0000", colorIco: "brown", label: "a", img: "", ico: "circle" },
+        { areaColor: "#ffff00", colorIco: "red", label: "b", img: "", ico: "triangle" },
+        { areaColor: "#ff00ff", colorIco: "blue", label: "c", img: "", ico: "square" },
+        { areaColor: "#00ff00", colorIco: "green", label: "d", img: "", ico: "pentagon" },
+        { areaColor: "#00ffff", colorIco: "yellow", label: "e", img: "", ico: "star" },
+        { areaColor: "#0000ff", colorIco: "purple", label: "f", img: "", ico: "hexagon" },
+        { areaColor: "#ff0000", colorIco: "orange", label: "g", img: "", ico: "asdasd" },
+      ],
+    },
   ],
-  [
-    { color: "red", label: "a", img: "" },
-    { color: "blue", label: "b", img: "" },
-    { color: "green", label: "c", img: "" },
-    { color: "yellow", label: "d", img: "" },
-    { color: "purple", label: "e", img: "" },
-    { color: "orange", label: "f", img: "" },
-    { color: "brown", label: "ggg", img: "" },
-  ],
-  [
-    { color: "white", label: "a", img: "", ico: "circle" },
-    { color: "blue", label: "b", img: "", ico: "triangle" },
-    { color: "green", label: "c", img: "", ico: "square" },
-    { color: "yellow", label: "d", img: "", ico: "pentagon" },
-    { color: "purple", label: "e", img: "", ico: "star" },
-    { color: "orange", label: "f", img: "", ico: "hexagon" },
-    { color: "brown", label: "g", img: "", ico: "asdasd" },
-  ],
-];
+};
 
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [screen, setScreen] = useState(KEYPAD_SCREEN);
   const [prevScreen, setPrevScreen] = useState(KEYPAD_SCREEN);
   const [fail, setFail] = useState(false);
+  const [config, setConfig] = useState({});
 
   useEffect(() => {
     console.log("useEffect, lets load everything");
     //localStorage.clear();  //For development, clear local storage (comentar y descomentar para desarrollo)
     I18n.init(GLOBAL_CONFIG);
     LocalStorage.init(GLOBAL_CONFIG.localStorageKey);
-    GLOBAL_CONFIG.escapp.onNewErStateCallback = (er_state) => {
-      console.log("New ER state received from ESCAPP", er_state);
-      restoreState(er_state);
-    };
-    GLOBAL_CONFIG.escapp.onErRestartCallback = (er_state) => {
-      // reset(); //For development
-      console.log("Escape Room Restart received from ESCAPP", er_state);
-      LocalStorage.removeSetting("app_state");
-      LocalStorage.removeSetting("played_door");
-    };
+
     escapp = new ESCAPP(GLOBAL_CONFIG.escapp);
-    escapp.validate((success, er_state) => {
-      console.log("ESCAPP validation", success, er_state);
-      try {
-        if (success) {
-          //ha ido bien, restauramos el estado recibido
-          restoreState(er_state);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    });
+    // escapp.validate((success, er_state) => {
+    //   console.log("ESCAPP validation", success, er_state);
+    //   try {
+    //     if (success) {
+    //     }
+    //   } catch (e) {
+    //     console.error(e);
+    //   }
+    // });
+    loadConfig(initialConfig);
 
     setLoading(false);
   }, []);
 
-  const solvePuzzle = (solution) => {
-    //XXX DUDA: a este método solo se le llama cuando sale el boton continue, que es cuando se han resuelto todos los puzzles
+  function loadConfig({ config, wheels }) {
+    let configuration = {
+      theme: {
+        name: config.theme,
+        ...(THEME_IMAGES[config.theme] || {}),
+      },
+      wheels: [],
+    };
 
-    //XXX DUDA: en el de MalditaER se guarda en localstorage con la clave "safebox_password", quizá sirva por si se vuelve a recargar o se vuelve a la app, que el estado se pierde.
-    //lo mejor seria guardar en localstorage todo el estado de la app cuando algo cambia y asi al volver a cargar la app se restaura el estado en el useEffect
-    console.log(solution);
-    escapp.submitPuzzle(GLOBAL_CONFIG.escapp.puzzleId, JSON.stringify(solution), {}, (success) => {
+    for (let i = 0; i < config.nWheels; i++) {
+      const wheel = wheels[i];
+      let newWheel = wheel ? { ...wheel, wheel: [] } : null;
+
+      if (newWheel) {
+        let wheelData;
+        switch (wheel.type) {
+          case WHEELTYPE.NUMBERS:
+            wheelData = (_, j) => ({ label: j + 1 });
+            break;
+          case WHEELTYPE.COLORS:
+            wheelData = () => ({ label: "" });
+            break;
+          case WHEELTYPE.SHAPES:
+            wheelData = (_, j) => ({ ico: ICONS[j % ICONS.length] || "" });
+            break;
+          case WHEELTYPE.COLORED_SHAPES:
+            wheelData = (_, j) => ({ ico: ICONS[j % ICONS.length] || "", colorIco: AREACOLOR.RAINBOW });
+            break;
+          case WHEELTYPE.CUSTOM:
+            newWheel.wheel = wheel.customWheel;
+            break;
+          default:
+            wheelData = (_, j) => ({ label: String.fromCharCode(65 + (j % 26)) });
+        }
+
+        if (wheel.type !== WHEELTYPE.CUSTOM) {
+          newWheel.wheel = Array.from({ length: wheel.length }, wheelData);
+        }
+        configuration.wheels.push(newWheel);
+      } else {
+        configuration.wheels.push({
+          type: WHEELTYPE.LETTERS,
+          length: 6,
+          wheel: Array.from({ length: 6 }, (_, j) => ({ label: String.fromCharCode(65 + j) })),
+        });
+      }
+    }
+    console.log(configuration);
+    setConfig(configuration);
+  }
+
+  const solvePuzzle = (solution) => {
+    const parsedSolution = Object.values(solution).join(",");
+    console.log(parsedSolution);
+    escapp.submitPuzzle(GLOBAL_CONFIG.escapp.puzzleId, JSON.stringify(parsedSolution), {}, (success) => {
       if (!success) {
         // alert("ta mal");
       } else {
@@ -95,60 +141,22 @@ export default function App() {
     });
   };
 
-  function reset() {
-    escapp.reset();
-    localStorage.clear();
-  }
-
-  function restoreState(er_state) {
-    console.log("Restoring state", er_state);
-  }
-
-  function saveState() {
-    console.log("Saving state to local storage");
-    let currentState = { screen: screen, prevScreen: prevScreen };
-    LocalStorage.saveSetting("app_state", currentState);
-  }
-
-  function restoreLocalState() {
-    let stateToRestore = LocalStorage.getSetting("app_state");
-    console.log("Restoring local state", stateToRestore);
-    if (stateToRestore) {
-      setScreen(stateToRestore.screen);
-      setPrevScreen(stateToRestore.prevScreen);
-      setLoading(false);
-    }
-  }
-
   function onOpenScreen(newscreen_name) {
     console.log("Opening screen", newscreen_name);
     setPrevScreen(screen);
     setScreen(newscreen_name);
-    saveState();
   }
-
-  /*
-  //COMENTADO PORQUE NO SE USA EN EL EJEMPLO, serviría para saber si se han superado todos los puzzles 
-  // y entonces se muestra un mensaje u otro en la pantalla final
-  //
-  let puzzlesSolved = [];
-  let solvedAllPuzzles = false;
-  if(!escapp){
-    //si no esta definido escapp, es que estamos loading
-    setLoading(true);
-  } else {
-    let newestState = escapp.getNewestState();
-    puzzlesSolved = (newestState && newestState.puzzlesSolved) ? newestState.puzzlesSolved : [];
-    //en este ejemplo se han superado todos los puzzles si se han superado 3 que es el total de la ER
-    solvedAllPuzzles = newestState.puzzlesSolved.length >= 3;
-  }
-  */
 
   return (
     <div id="firstnode">
       <audio id="audio_failure" src="sounds/wrong.wav" autostart="false" preload="auto" />
       <div className={`main-background ${fail ? "fail" : ""}`}>
-        <MainScreen show={screen === KEYPAD_SCREEN} initialConfig={initialConfig} solvePuzzle={solvePuzzle} />
+        <MainScreen
+          show={screen === KEYPAD_SCREEN}
+          initialConfig={initialConfig.customWheels}
+          solvePuzzle={solvePuzzle}
+          config={config}
+        />
         <ControlPanel show={screen === CONTROL_PANEL_SCREEN} onOpenScreen={onOpenScreen} />
       </div>
     </div>
