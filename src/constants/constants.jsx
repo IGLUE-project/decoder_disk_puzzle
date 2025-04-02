@@ -19,7 +19,7 @@ export const WHEELTYPE = {
   CUSTOM: "custom",
 };
 export const AREACOLOR = {
-  BLACK: "black",
+  NONE: "",
   RAINBOW: "rainbow",
   CUSTOM: "custom",
 };

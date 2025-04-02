@@ -52,8 +52,8 @@ const initialConfig = {
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [screen, setScreen] = useState(KEYPAD_SCREEN);
-  const [prevScreen, setPrevScreen] = useState(KEYPAD_SCREEN);
+  const [screen, setScreen] = useState(CONTROL_PANEL_SCREEN);
+  const [prevScreen, setPrevScreen] = useState(CONTROL_PANEL_SCREEN);
   const [fail, setFail] = useState(false);
   const [config, setConfig] = useState({});
 
@@ -151,13 +151,8 @@ export default function App() {
     <div id="firstnode">
       <audio id="audio_failure" src="sounds/wrong.wav" autostart="false" preload="auto" />
       <div className={`main-background ${fail ? "fail" : ""}`}>
-        <MainScreen
-          show={screen === KEYPAD_SCREEN}
-          initialConfig={initialConfig.customWheels}
-          solvePuzzle={solvePuzzle}
-          config={config}
-        />
-        <ControlPanel show={screen === CONTROL_PANEL_SCREEN} onOpenScreen={onOpenScreen} />
+        <MainScreen show={screen === KEYPAD_SCREEN} solvePuzzle={solvePuzzle} config={config} />
+        <ControlPanel show={screen === CONTROL_PANEL_SCREEN} onOpenScreen={onOpenScreen} loadConfig={loadConfig} />
       </div>
     </div>
   );

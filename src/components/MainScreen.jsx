@@ -3,7 +3,7 @@ import "./../assets/scss/MainScreen.scss";
 import RoundButton from "./RoundButton";
 import Wheel from "./Wheel";
 
-export default function MainScreen({ show, initialConfig, solvePuzzle, config }) {
+export default function MainScreen({ show, solvePuzzle, config }) {
   const [result, setResult] = useState({});
 
   const loadResult = (result, key) => {
