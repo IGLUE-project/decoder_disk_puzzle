@@ -26,7 +26,10 @@ export const AREACOLOR = {
 export const ICONS = ["circle", "triangle", "square", "pentagon", "star", "hexagon"];
 
 export const THEME_IMAGES = {
-  [THEMES.ANCIENT]: { backgroundImg: "", wheelImg: "/src/assets/images/ancient_wheel.png" },
+  [THEMES.ANCIENT]: {
+    backgroundImg: "/src/assets/images/ancient_background.png",
+    wheelImg: "/src/assets/images/ancient_wheel.png",
+  },
   [THEMES.CONTEMPORARY]: { backgroundImg: "", wheelImg: "" },
   [THEMES.FUTURISTIC]: { backgroundImg: "", wheelImg: "/src/assets/images/futuristic_wheel.png" },
 };

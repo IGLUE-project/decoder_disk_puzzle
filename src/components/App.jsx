@@ -23,7 +23,7 @@ let escapp;
 const initialConfig = {
   config: {
     nWheels: 4,
-    theme: THEMES.ANCIENT,
+    theme: THEMES.BASIC,
   },
   wheels: [
     {
@@ -150,7 +150,10 @@ export default function App() {
   return (
     <div id="firstnode">
       <audio id="audio_failure" src="sounds/wrong.wav" autostart="false" preload="auto" />
-      <div className={`main-background ${fail ? "fail" : ""}`}>
+      <div
+        style={{ backgroundImage: config.theme?.backgroundImg ? `url(${config.theme.backgroundImg})` : "" }}
+        className={`main-background ${fail ? "fail" : ""}`}
+      >
         <MainScreen show={screen === KEYPAD_SCREEN} solvePuzzle={solvePuzzle} config={config} />
         <ControlPanel show={screen === CONTROL_PANEL_SCREEN} onOpenScreen={onOpenScreen} loadConfig={loadConfig} />
       </div>
