@@ -5,6 +5,19 @@ div.cover {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  img {
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  &.image {
+    background-color: unset;
+    &:active {
+      transform: scale(0.95);
+    }
+  }
 }
 
 .button {

@@ -142,10 +142,10 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg }) => {
           if (iconImages["wheelImg"]) {
             if (wheel.areaColor === AREACOLOR.RAINBOW)
               areaColor = `hsla(${(i * 360) / slices.length}, 100%, 50%, 0.20)`;
-            else if (wheel.wheel[i].areaColor[0] === "#") areaColor = wheel.wheel[i].areaColor + "33";
+            else if (slices[i].areaColor && slices[i].areaColor[0] === "#") areaColor = slices[i].areaColor + "33";
           } else {
             if (wheel.areaColor === AREACOLOR.RAINBOW) areaColor = `hsla(${(i * 360) / slices.length}, 100%, 50%)`;
-            else if (wheel.wheel[i].areaColor[0] === "#") areaColor = wheel.wheel[i].areaColor;
+            else if (slices[i].areaColor && slices[i].areaColor[0] === "#") areaColor = slices[i].areaColor;
           }
           ctx.fillStyle = areaColor;
           ctx.fill();

@@ -1,4 +1,8 @@
 canvas {
   position: absolute;
   border-radius: 50%;
+  cursor: grab;
+  &:active {
+    cursor: grabbing;
+  }
 }

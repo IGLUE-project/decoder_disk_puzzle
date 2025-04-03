@@ -11,7 +11,7 @@ import {
   CONTROL_PANEL_SCREEN,
   ICONS,
   KEYPAD_SCREEN,
-  THEME_IMAGES,
+  THEME_ASSETS,
   THEMES,
   WHEELTYPE,
 } from "../constants/constants.jsx";
@@ -82,7 +82,7 @@ export default function App() {
     let configuration = {
       theme: {
         name: config.theme,
-        ...(THEME_IMAGES[config.theme] || {}),
+        ...(THEME_ASSETS[config.theme] || {}),
       },
       wheels: [],
     };
@@ -149,7 +149,6 @@ export default function App() {
 
   return (
     <div id="firstnode">
-      <audio id="audio_failure" src="sounds/wrong.wav" autostart="false" preload="auto" />
       <div
         style={{ backgroundImage: config.theme?.backgroundImg ? `url(${config.theme.backgroundImg})` : "" }}
         className={`main-background ${fail ? "fail" : ""}`}

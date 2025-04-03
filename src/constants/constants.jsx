@@ -25,11 +25,33 @@ export const AREACOLOR = {
 };
 export const ICONS = ["circle", "triangle", "square", "pentagon", "star", "hexagon"];
 
-export const THEME_IMAGES = {
+export const THEME_ASSETS = {
   [THEMES.ANCIENT]: {
     backgroundImg: "/src/assets/images/ancient_background.png",
     wheelImg: "/src/assets/images/ancient_wheel.png",
+    buttonImg: "/src/assets/images/ancient_button.png",
+    moveAudio: "sounds/ancient_wheel.wav",
+    buttonAudio: "sounds/button-stone.wav",
   },
-  [THEMES.CONTEMPORARY]: { backgroundImg: "", wheelImg: "" },
-  [THEMES.FUTURISTIC]: { backgroundImg: "", wheelImg: "/src/assets/images/futuristic_wheel.png" },
+  [THEMES.BASIC]: {
+    backgroundImg: "",
+    wheelImg: "",
+    buttonImg: "",
+    moveAudio: "sounds/tick.wav",
+    buttonAudio: "sounds/button.wav",
+  },
+  [THEMES.CONTEMPORARY]: {
+    backgroundImg: "",
+    wheelImg: "",
+    buttonImg: "",
+    moveAudio: "sounds/tick.wav",
+    buttonAudio: "sounds/button.wav",
+  },
+  [THEMES.FUTURISTIC]: {
+    backgroundImg: "/src/assets/images/futuristic_background.png",
+    wheelImg: "/src/assets/images/futuristic_wheel.png",
+    buttonImg: "/src/assets/images/futuristic_button.png",
+    moveAudio: "sounds/futuristic_wheel.wav",
+    buttonAudio: "sounds/futuristic_button.mp3",
+  },
 };

@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./../assets/scss/MainScreen.scss";
 import RoundButton from "./RoundButton";
 import Wheel from "./Wheel";
 
 export default function MainScreen({ show, solvePuzzle, config }) {
   const [result, setResult] = useState({});
+  const prevResultRef = useRef(null);
 
   const loadResult = (result, key) => {
     setResult((prev) => ({
@@ -13,12 +14,18 @@ export default function MainScreen({ show, solvePuzzle, config }) {
     }));
   };
 
+  useEffect(() => {
+    if (prevResultRef.current && JSON.stringify(prevResultRef.current) !== JSON.stringify(result)) {
+      new Audio(config.theme?.moveAudio).play();
+    }
+    prevResultRef.current = result;
+  }, [result]);
+
   const onCentralButtonClick = () => solvePuzzle(result);
 
   return (
     <div id="MainScreen" className={"screen_wrapper" + (show ? "" : " screen_hidden")}>
       <div className="frame">
-        <audio id="audio_click" src="sounds/click_button.wav" autostart="false" preload="auto" />
         {config.wheels && (
           <div
             className="wheels"
@@ -40,6 +47,7 @@ export default function MainScreen({ show, solvePuzzle, config }) {
               onClick={onCentralButtonClick}
               size={{ width: 200, height: 200 }}
               buttonImage={config.theme.buttonImg}
+              buttonAudio={config.theme.buttonAudio}
             />
           </div>
         )}
