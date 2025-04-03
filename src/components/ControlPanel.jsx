@@ -72,6 +72,7 @@ const ControlPanel = ({ show, onOpenScreen, loadConfig }) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
+          overflow: "auto",
         }}
       >
         <div style={{ padding: "50px 100px" }}>
