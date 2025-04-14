@@ -37,12 +37,16 @@ export default function MainScreen({ show, solvePuzzle, config }) {
               <Wheel
                 key={index}
                 wheel={wheel}
+                theme={config.theme}
                 wheelImg={config.theme.wheelImg}
                 config={{ id: config.wheels.length - index }}
                 size={{ width: 350 + 150 * index, height: 350 + 150 * index }}
                 setResult={loadResult}
               />
             ))}
+            <div className="wheel_shadow">
+ 
+            </div>
             <RoundButton
               onClick={onCentralButtonClick}
               size={{ width: 200, height: 200 }}

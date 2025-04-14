@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { iconMap } from "../icons/shapesIcons";
 import "../assets/scss/Wheel.scss";
 import ReactDOMServer from "react-dom/server";
-import { AREACOLOR } from "../constants/constants";
+import { AREACOLOR, THEMES } from "../constants/constants";
+
 
 let mouseX = 0;
 let mouseY = 0;
@@ -39,7 +40,7 @@ const preloadIcons = (slices, wheelImg) => {
   return images;
 };
 
-const Wheel = ({ config, size, setResult, wheel, wheelImg }) => {
+const Wheel = ({ config, size, setResult, wheel, wheelImg, theme }) => {
   const canvasRef = useRef(null);
   const draggingRef = useRef(false);
   const [rotation, setRotation] = useState(0);
@@ -99,6 +100,7 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg }) => {
         ctx.rotate(rotation);
         ctx.translate(-centerX, -centerY);
 
+
         //TODO: decidir si dividir imagen o repetir anillos
         // ctx.drawImage(iconImages["wheelImg"], 5, 5, size.width - 10, size.height - 10);
         const offset = (config.id - 1) * 150;
@@ -136,8 +138,16 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg }) => {
         ctx.arc(centerX, centerY, radius, startAngle, endAngle);
         ctx.closePath();
 
-        let areaColor = "#9b9b9b"; // Color por defecto
+        //shadow para bordes
+        if (theme.name === "futuristic") {
+          ctx.shadowColor = "#DE0CFF";
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 0;
+          ctx.shadowBlur = 15;
+        }
 
+        let areaColor = "#9b9b9b"; // Color por defecto
+      
         if (wheel.areaColor) {
           if (iconImages["wheelImg"]) {
             if (wheel.areaColor === AREACOLOR.RAINBOW)
@@ -154,12 +164,31 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg }) => {
           ctx.fillStyle = areaColor;
           ctx.fill();
         }
-
-        // Dibujar borde negro alrededor del área
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 4;
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 2;
         ctx.stroke();
 
+
+        // bordes según tema:
+        if (theme.name === "ancient") {
+          // Dibujar borde negro alrededor del área
+          ctx.strokeStyle = "#222200";
+          ctx.lineWidth = 4;
+          ctx.stroke();
+
+        } else if (theme.name === "futuristic") {
+          ctx.shadowColor = "#DE0CFF";
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 0;
+          ctx.shadowBlur = 8;
+
+          // Dibujar borde negro alrededor del área
+          ctx.strokeStyle = "#F7C5FF";
+          ctx.lineWidth = 3;
+          ctx.stroke();
+         
+        }
+        ctx.shadowBlur = 0;
         // Calcular la posición del icono o texto
         const textX = centerX + Math.cos(midAngle) * (radius - 37.5);
         const textY = centerY + Math.sin(midAngle) * (radius - 37.5);
