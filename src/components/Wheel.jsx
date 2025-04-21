@@ -100,18 +100,24 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg, theme }) => {
         ctx.rotate(rotation);
         ctx.translate(-centerX, -centerY);
 
+        const offset = (config.id - 1) * 150;
+        console.log(offset, " rueda", config.id);
 
+        if (theme.name === "contemporary") { 
+          ctx.drawImage(iconImages["wheelImg"], 0, 0, size.width, size.height );
+        } else {
+          ctx.drawImage(iconImages["wheelImg"], -offset / 2, -offset / 2, size.width + offset, size.height + offset);
+        }
         //TODO: decidir si dividir imagen o repetir anillos
         // ctx.drawImage(iconImages["wheelImg"], 5, 5, size.width - 10, size.height - 10);
-        const offset = (config.id - 1) * 150;
-        ctx.drawImage(iconImages["wheelImg"], -offset / 2, -offset / 2, size.width + offset, size.height + offset);
-
+   
         ctx.restore();
       }
       ctx.beginPath();
-      ctx.arc(centerX, centerY, radius + 5, 0, Math.PI * 2);
-      ctx.arc(centerX, centerY, radius - 2, 0, Math.PI * 2, true);
-      ctx.fillStyle = "black";
+      // aquí baje el grosor del arco, quitando el +5 y el -2
+      ctx.arc(centerX, centerY, radius + 1 , 0, Math.PI * 2);
+      ctx.arc(centerX, centerY, radius - 1 , 0, Math.PI * 2, true);
+      //ctx.fillStyle = "black";
       ctx.fill();
       ctx.closePath();
 
@@ -144,7 +150,13 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg, theme }) => {
           ctx.shadowOffsetX = 0;
           ctx.shadowOffsetY = 0;
           ctx.shadowBlur = 15;
+        } else if (theme.name === "contemporary") {
+          ctx.shadowColor = "#2f2b4f";
+          ctx.shadowOffsetX = 5;
+          ctx.shadowOffsetY = 0;
+          ctx.shadowBlur = 15;
         }
+
 
         let areaColor = "#9b9b9b"; // Color por defecto
       
@@ -164,12 +176,18 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg, theme }) => {
           ctx.fillStyle = areaColor;
           ctx.fill();
         }
-        ctx.strokeStyle = "#000000";
+  
+        // bordes de ruedas
+        if (theme.name === "contemporary") {
+          ctx.strokeStyle = "#141f40";
+        }
+        else {
+        ctx.strokeStyle = "#000000";}
         ctx.lineWidth = 2;
         ctx.stroke();
 
 
-        // bordes según tema:
+        // bordes de división segmentos según tema:
         if (theme.name === "ancient") {
           // Dibujar borde negro alrededor del área
           ctx.strokeStyle = "#222200";
@@ -177,6 +195,7 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg, theme }) => {
           ctx.stroke();
 
         } else if (theme.name === "futuristic") {
+          // resplandor
           ctx.shadowColor = "#DE0CFF";
           ctx.shadowOffsetX = 0;
           ctx.shadowOffsetY = 0;
@@ -186,7 +205,18 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg, theme }) => {
           ctx.strokeStyle = "#F7C5FF";
           ctx.lineWidth = 3;
           ctx.stroke();
-         
+ 
+        } else if  (theme.name === "contemporary") {
+          // resplandor
+          ctx.shadowColor = "#2f2b4f";
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 0;
+          ctx.shadowBlur = 7;
+
+           // Dibujar borde negro alrededor del área
+          ctx.strokeStyle = "#3c4e85";
+          ctx.lineWidth = 1;
+          ctx.stroke();
         }
         ctx.shadowBlur = 0;
         // Calcular la posición del icono o texto

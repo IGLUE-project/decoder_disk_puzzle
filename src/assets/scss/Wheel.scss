@@ -17,3 +17,9 @@ canvas {
   mix-blend-mode: multiply;
   filter: blur(1px);
 }
+#wheel_shadow_contemporary {
+  left: 10px;
+  bottom: 35px;
+  background-color: rgba(89, 90, 173, 0.527);
+  filter: blur(12px)
+}

@@ -44,8 +44,8 @@ export default function MainScreen({ show, solvePuzzle, config }) {
                 setResult={loadResult}
               />
             ))}
-            <div className="wheel_shadow">
- 
+            <div className="wheel_shadow" id={`wheel_shadow_${config.theme.name}`}>
+  {console.log(config.theme, " config theme")}
             </div>
             <RoundButton
               onClick={onCentralButtonClick}
