@@ -60,8 +60,8 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg }) => {
           (img) =>
             new Promise((resolve) => {
               img.onload = resolve; // Resolvemos la promesa cuando la imagen se haya cargado
-            }),
-        ),
+            })
+        )
       );
 
       // Cuando todas las imágenes se han cargado, guardamos las imágenes
@@ -100,9 +100,9 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg }) => {
         ctx.translate(-centerX, -centerY);
 
         //TODO: decidir si dividir imagen o repetir anillos
-        // ctx.drawImage(iconImages["wheelImg"], 5, 5, size.width - 10, size.height - 10);
-        const offset = (config.id - 1) * 150;
-        ctx.drawImage(iconImages["wheelImg"], -offset / 2, -offset / 2, size.width + offset, size.height + offset);
+        ctx.drawImage(iconImages["wheelImg"], 5, 5, size.width - 10, size.height - 10);
+        // const offset = (config.id - 1) * 150;
+        // ctx.drawImage(iconImages["wheelImg"], -offset / 2, -offset / 2, size.width + offset, size.height + offset);
 
         ctx.restore();
       }
@@ -140,8 +140,7 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg }) => {
 
         if (wheel.areaColor) {
           if (iconImages["wheelImg"]) {
-            if (wheel.areaColor === AREACOLOR.RAINBOW)
-              areaColor = `hsla(${(i * 360) / slices.length}, 100%, 50%, 0.20)`;
+            if (wheel.areaColor === AREACOLOR.RAINBOW) areaColor = `hsla(${(i * 360) / slices.length}, 100%, 50%, 0.20)`;
             else if (slices[i].areaColor && slices[i].areaColor[0] === "#") areaColor = slices[i].areaColor + "33";
           } else {
             if (wheel.areaColor === AREACOLOR.RAINBOW) areaColor = `hsla(${(i * 360) / slices.length}, 100%, 50%)`;
@@ -173,14 +172,34 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg }) => {
         if (iconImages[slices[i].ico + i]) {
           ctx.drawImage(iconImages[slices[i].ico + i], -20, -20, 40, 40); // Centrado del icono
         } else {
+          // ctx.fillStyle = "white";
+          // ctx.font = "20px Arial";
+          // ctx.textAlign = "center";
+          // ctx.textBaseline = "middle";
+          // ctx.strokeStyle = "black";
+          // ctx.lineWidth = 3;
+          // ctx.strokeText(slices[i].label, 0, 0);
+          // ctx.fillText(slices[i].label, 0, 0);
+
           ctx.fillStyle = "white";
           ctx.font = "20px Arial";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.strokeStyle = "black";
-          ctx.lineWidth = 3;
-          ctx.strokeText(slices[i].label, 0, 0);
-          ctx.fillText(slices[i].label, 0, 0);
+
+          // Medir el texto
+          const text = slices[i].label;
+          const padding = 4;
+          const textMetrics = ctx.measureText(text);
+          const textWidth = textMetrics.width;
+          const textHeight = 20; // Aproximado según el font size
+
+          // Dibujar fondo negro
+          ctx.fillStyle = "black";
+          ctx.fillRect(-textWidth / 2 - padding, -textHeight / 2 - padding, textWidth + padding * 2, textHeight + padding * 2);
+
+          // Dibujar texto blanco encima
+          ctx.fillStyle = "white";
+          ctx.fillText(text, 0, 0);
         }
         ctx.restore();
 
