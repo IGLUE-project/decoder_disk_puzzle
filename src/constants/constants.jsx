@@ -41,9 +41,9 @@ export const THEME_ASSETS = {
     buttonAudio: "sounds/button.wav",
   },
   [THEMES.CONTEMPORARY]: {
-    backgroundImg: "",
-    wheelImg: "",
-    buttonImg: "",
+    backgroundImg: "/src/assets/images/contemporary_background.png",
+    wheelImg: "/src/assets/images/contemporary_wheel.png",
+    buttonImg: "/src/assets/images/contemporary_button.png",
     moveAudio: "sounds/tick.wav",
     buttonAudio: "sounds/button.wav",
   },
