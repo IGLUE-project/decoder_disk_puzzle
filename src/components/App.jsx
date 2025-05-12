@@ -22,8 +22,8 @@ let escapp;
 
 const initialConfig = {
   config: {
-    nWheels: 3,
-    theme: THEMES.CONTEMPORARY,
+    nWheels: 4,
+    theme: THEMES.ANCIENT,
   },
   wheels: [
     {

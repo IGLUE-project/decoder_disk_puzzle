@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import ReactDOMServer from "react-dom/server";
 import "../assets/scss/Wheel.scss";
-import { AREACOLOR } from "../constants/constants";
+import { AREACOLOR, THEMES } from "../constants/constants";
 import { iconMap } from "../icons/shapesIcons";
 
 let mouseX = 0;
@@ -50,6 +50,9 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   const radius = Math.min(centerX, centerY) - 2;
   let slices = wheel.wheel;
   const angleStep = (2 * Math.PI) / slices.length;
+  const fontSize = size.width * 0.045 + config.id * 2;
+  const iconSize = size.width * 0.1;
+  const labelOffset = size.width * 0.06 + config.id * 2;
 
   useImperativeHandle(ref, () => ({
     getResult: () => ({ id: config.id, value: topPosition }),
@@ -77,7 +80,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   }, []);
 
   useEffect(() => {
-    new Audio(theme.moveAudio).play();
+    if (theme.moveAudio) new Audio(theme.moveAudio).play();
   }, [topPosition]);
 
   useEffect(() => {
@@ -100,23 +103,19 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         ctx.translate(-centerX, -centerY);
 
         const offset = (config.id - 1) * 150;
-        console.log(offset, " rueda", config.id);
 
         if (theme.repeatWheelImg) {
           ctx.drawImage(iconImages["wheelImg"], 0, 0, size.width, size.height);
         } else {
           ctx.drawImage(iconImages["wheelImg"], -offset / 2, -offset / 2, size.width + offset, size.height + offset);
         }
-        //TODO: decidir si dividir imagen o repetir anillos
-        // ctx.drawImage(iconImages["wheelImg"], 5, 5, size.width - 10, size.height - 10);
 
         ctx.restore();
       }
       ctx.beginPath();
-      // aquí baje el grosor del arco, quitando el +5 y el -2
       ctx.arc(centerX, centerY, radius + 1, 0, Math.PI * 2);
       ctx.arc(centerX, centerY, radius - 1, 0, Math.PI * 2, true);
-      //ctx.fillStyle = "black";
+
       ctx.fill();
       ctx.closePath();
 
@@ -130,7 +129,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
     }
 
     function drawRoulette() {
-      const offset = -Math.PI / slices.length; // Ajuste para centrar un quesito arriba
+      const offset = -Math.PI / slices.length;
 
       for (let i = 0; i < slices.length; i++) {
         const startAngle = i * angleStep + offset;
@@ -144,12 +143,12 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         ctx.closePath();
 
         //shadow para bordes
-        if (theme.name === "futuristic") {
+        if (theme.name === THEMES.FUTURISTIC) {
           ctx.shadowColor = "#DE0CFF";
           ctx.shadowOffsetX = 0;
           ctx.shadowOffsetY = 0;
           ctx.shadowBlur = 15;
-        } else if (theme.name === "contemporary") {
+        } else if (theme.name === THEMES.CONTEMPORARY) {
           ctx.shadowColor = "#2f2b4f";
           ctx.shadowOffsetX = 5;
           ctx.shadowOffsetY = 0;
@@ -176,7 +175,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         }
 
         // bordes de ruedas
-        if (theme.name === "contemporary") {
+        if (theme.name === THEMES.CONTEMPORARY) {
           ctx.strokeStyle = "#141f40";
         } else {
           ctx.strokeStyle = "#000000";
@@ -185,12 +184,12 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         ctx.stroke();
 
         // bordes de división segmentos según tema:
-        if (theme.name === "ancient") {
+        if (theme.name === THEMES.ANCIENT) {
           // Dibujar borde negro alrededor del área
           ctx.strokeStyle = "#222200";
           ctx.lineWidth = 4;
           ctx.stroke();
-        } else if (theme.name === "futuristic") {
+        } else if (theme.name === THEMES.FUTURISTIC) {
           // resplandor
           ctx.shadowColor = "#DE0CFF";
           ctx.shadowOffsetX = 0;
@@ -201,7 +200,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
           ctx.strokeStyle = "#F7C5FF";
           ctx.lineWidth = 3;
           ctx.stroke();
-        } else if (theme.name === "contemporary") {
+        } else if (theme.name === THEMES.CONTEMPORARY) {
           // resplandor
           ctx.shadowColor = "#2f2b4f";
           ctx.shadowOffsetX = 0;
@@ -215,8 +214,8 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         }
         ctx.shadowBlur = 0;
         // Calcular la posición del icono o texto
-        const textX = centerX + Math.cos(midAngle) * (radius - 37.5);
-        const textY = centerY + Math.sin(midAngle) * (radius - 37.5);
+        const textX = centerX + Math.cos(midAngle) * (radius - labelOffset);
+        const textY = centerY + Math.sin(midAngle) * (radius - labelOffset);
 
         //rotación del texto/icono
         ctx.save();
@@ -225,37 +224,21 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
         // Si existe un icono pre-cargado, dibujarlo
         if (iconImages[slices[i].ico + i]) {
-          ctx.drawImage(iconImages[slices[i].ico + i], -20, -20, 40, 40); // Centrado del icono
+          ctx.drawImage(iconImages[slices[i].ico + i], -iconSize / 2, -iconSize / 2, iconSize, iconSize); // Centrado del icono
         } else {
-          // ctx.fillStyle = "white";
-          // ctx.font = "20px Arial";
-          // ctx.textAlign = "center";
-          // ctx.textBaseline = "middle";
-          // ctx.strokeStyle = "black";
-          // ctx.lineWidth = 3;
-          // ctx.strokeText(slices[i].label, 0, 0);
-          // ctx.fillText(slices[i].label, 0, 0);
-
           ctx.fillStyle = "white";
-          ctx.font = "20px Arial";
+          ctx.font = `${fontSize}px Arial`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
 
           // Medir el texto
           const text = slices[i].label;
-          const padding = 4;
-          const textMetrics = ctx.measureText(text);
-          const textWidth = textMetrics.width;
-          const textHeight = 20; // Aproximado según el font size
+          const padding = 3;
+          const { width: textWidth } = ctx.measureText(text);
 
           // Dibujar fondo negro
           ctx.fillStyle = "black";
-          ctx.fillRect(
-            -textWidth / 2 - padding,
-            -textHeight / 2 - padding,
-            textWidth + padding * 2,
-            textHeight + padding * 2,
-          );
+          ctx.fillRect(-textWidth / 2 - padding, -fontSize / 2 - padding, textWidth + padding * 2, fontSize + padding);
 
           // Dibujar texto blanco encima
           ctx.fillStyle = "white";
