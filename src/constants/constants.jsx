@@ -32,6 +32,7 @@ export const THEME_ASSETS = {
     buttonImg: "/src/assets/images/ancient_button.png",
     moveAudio: "sounds/ancient_wheel.wav",
     buttonAudio: "sounds/button-stone.wav",
+    repeatWheelImg: false,
   },
   [THEMES.BASIC]: {
     backgroundImg: "",
@@ -39,6 +40,7 @@ export const THEME_ASSETS = {
     buttonImg: "",
     moveAudio: "sounds/tick.wav",
     buttonAudio: "sounds/button.wav",
+    repeatWheelImg: false,
   },
   [THEMES.CONTEMPORARY]: {
     backgroundImg: "/src/assets/images/contemporary_background.png",
@@ -46,6 +48,7 @@ export const THEME_ASSETS = {
     buttonImg: "/src/assets/images/contemporary_button.png",
     moveAudio: "sounds/tick.wav",
     buttonAudio: "sounds/button.wav",
+    repeatWheelImg: true,
   },
   [THEMES.FUTURISTIC]: {
     backgroundImg: "/src/assets/images/futuristic_background.png",
@@ -53,5 +56,6 @@ export const THEME_ASSETS = {
     buttonImg: "/src/assets/images/futuristic_button.png",
     moveAudio: "sounds/futuristic_wheel.wav",
     buttonAudio: "sounds/futuristic_button.mp3",
+    repeatWheelImg: false,
   },
 };

@@ -22,8 +22,8 @@ let escapp;
 
 const initialConfig = {
   config: {
-    nWheels: 4,
-    theme: THEMES.BASIC,
+    nWheels: 3,
+    theme: THEMES.CONTEMPORARY,
   },
   wheels: [
     {
@@ -52,31 +52,62 @@ const initialConfig = {
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [screen, setScreen] = useState(CONTROL_PANEL_SCREEN);
-  const [prevScreen, setPrevScreen] = useState(CONTROL_PANEL_SCREEN);
+  const [screen, setScreen] = useState(KEYPAD_SCREEN);
+  const [prevScreen, setPrevScreen] = useState(KEYPAD_SCREEN);
   const [fail, setFail] = useState(false);
-  const [config, setConfig] = useState({});
+  const [config, setConfig] = useState();
+  const [solved, setSolved] = useState(false);
 
   useEffect(() => {
     console.log("useEffect, lets load everything");
-    //localStorage.clear();  //For development, clear local storage (comentar y descomentar para desarrollo)
+    // localStorage.clear(); //For development, clear local storage (comentar y descomentar para desarrollo)
     I18n.init(GLOBAL_CONFIG);
     LocalStorage.init(GLOBAL_CONFIG.localStorageKey);
 
     escapp = new ESCAPP(GLOBAL_CONFIG.escapp);
-    // escapp.validate((success, er_state) => {
-    //   console.log("ESCAPP validation", success, er_state);
-    //   try {
-    //     if (success) {
-    //     }
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // });
+    escapp.validate((success, er_state) => {
+      console.log("ESCAPP validation", success, er_state);
+      try {
+        if (success) {
+          //ha ido bien, restauramos el estado recibido
+          restoreState(er_state);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    });
     loadConfig(initialConfig);
 
     setLoading(false);
   }, []);
+
+  function restoreState(er_state) {
+    console.log("Restoring state", er_state);
+    if (typeof er_state !== "undefined" && er_state.puzzlesSolved.length > 0) {
+      let lastPuzzleSolved = Math.max.apply(null, er_state.puzzlesSolved);
+      if (lastPuzzleSolved >= GLOBAL_CONFIG.escapp.puzzleId) {
+      } else {
+        //puzzle no superado, miramos en localStorage en qué pantalla estábamos
+        let localstateToRestore = LocalStorage.getSetting("app_state");
+        console.log("Restoring screen from local state", localstateToRestore);
+        if (localstateToRestore) {
+        }
+      }
+      setLoading(false);
+    } else {
+      restoreLocalState();
+    }
+  }
+
+  function restoreLocalState() {
+    let stateToRestore = LocalStorage.getSetting("app_state");
+    console.log("Restoring local state", stateToRestore);
+    if (stateToRestore) {
+      setScreen(stateToRestore.screen);
+      setPrevScreen(stateToRestore.prevScreen);
+      setLoading(false);
+    }
+  }
 
   function loadConfig({ config, wheels }) {
     let configuration = {
@@ -130,14 +161,12 @@ export default function App() {
   }
 
   const solvePuzzle = (solution) => {
-    const parsedSolution = Object.values(solution).join(",");
+    const parsedSolution = Object.values(solution)
+      .map((value) => value + 1)
+      .join(",");
     console.log(parsedSolution);
-    escapp.submitPuzzle(GLOBAL_CONFIG.escapp.puzzleId, JSON.stringify(parsedSolution), {}, (success) => {
-      if (!success) {
-        // alert("ta mal");
-      } else {
-        // alert("ta bien");
-      }
+    escapp.submitPuzzle(GLOBAL_CONFIG.escapp.puzzleId, parsedSolution, {}, (success) => {
+      setSolved(success);
     });
   };
 
@@ -149,13 +178,15 @@ export default function App() {
 
   return (
     <div id="firstnode">
-      <div
-        style={{ backgroundImage: config.theme?.backgroundImg ? `url(${config.theme.backgroundImg})` : "" }}
-        className={`main-background ${fail ? "fail" : ""}`}
-      >
-        <MainScreen show={screen === KEYPAD_SCREEN} solvePuzzle={solvePuzzle} config={config} />
-        <ControlPanel show={screen === CONTROL_PANEL_SCREEN} onOpenScreen={onOpenScreen} loadConfig={loadConfig} />
-      </div>
+      {config && (
+        <div
+          style={{ backgroundImage: config.theme?.backgroundImg ? `url(${config.theme.backgroundImg})` : "" }}
+          className={`main-background ${fail ? "fail" : ""}`}
+        >
+          <MainScreen show={screen === KEYPAD_SCREEN} solvePuzzle={solvePuzzle} config={config} solved={solved} />
+          <ControlPanel show={screen === CONTROL_PANEL_SCREEN} onOpenScreen={onOpenScreen} loadConfig={loadConfig} />
+        </div>
+      )}
     </div>
   );
 }

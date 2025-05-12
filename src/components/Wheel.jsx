@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import { iconMap } from "../icons/shapesIcons";
-import "../assets/scss/Wheel.scss";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import ReactDOMServer from "react-dom/server";
-import { AREACOLOR, THEMES } from "../constants/constants";
+import "../assets/scss/Wheel.scss";
+import { AREACOLOR } from "../constants/constants";
+import { iconMap } from "../icons/shapesIcons";
 
 let mouseX = 0;
 let mouseY = 0;
@@ -39,16 +39,21 @@ const preloadIcons = (slices, wheelImg) => {
   return images;
 };
 
-const Wheel = ({ config, size, setResult, wheel, wheelImg, theme }) => {
+const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref) => {
   const canvasRef = useRef(null);
   const draggingRef = useRef(false);
   const [rotation, setRotation] = useState(0);
   const [iconImages, setIconImages] = useState(null);
+  const [topPosition, setTopPosition] = useState(-1);
   const centerX = size.width / 2;
   const centerY = size.height / 2;
   const radius = Math.min(centerX, centerY) - 2;
   let slices = wheel.wheel;
   const angleStep = (2 * Math.PI) / slices.length;
+
+  useImperativeHandle(ref, () => ({
+    getResult: () => ({ id: config.id, value: topPosition }),
+  }));
 
   useEffect(() => {
     const loadIcons = async () => {
@@ -69,10 +74,14 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg, theme }) => {
     };
 
     loadIcons();
-  }, [slices]);
+  }, []);
 
   useEffect(() => {
-    if (!iconImages) return; // Asegurarse de que los iconos estén cargados antes de renderizar
+    new Audio(theme.moveAudio).play();
+  }, [topPosition]);
+
+  useEffect(() => {
+    if (!iconImages) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -80,17 +89,8 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg, theme }) => {
     canvas.height = size.height;
 
     function drawGame() {
-      ctx.clearRect(0, 0, size.width, size.height);
-
       ctx.fillStyle = "#000";
       ctx.fillRect(0, 0, size.width, size.height);
-
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-      ctx.arc(centerX, centerY, radius - 20, 0, Math.PI * 2, true);
-      ctx.fillStyle = "black";
-      ctx.fill();
-      ctx.closePath();
 
       if (iconImages["wheelImg"]) {
         ctx.save();
@@ -102,7 +102,7 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg, theme }) => {
         const offset = (config.id - 1) * 150;
         console.log(offset, " rueda", config.id);
 
-        if (theme.name === "contemporary") {
+        if (theme.repeatWheelImg) {
           ctx.drawImage(iconImages["wheelImg"], 0, 0, size.width, size.height);
         } else {
           ctx.drawImage(iconImages["wheelImg"], -offset / 2, -offset / 2, size.width + offset, size.height + offset);
@@ -262,9 +262,8 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg, theme }) => {
           ctx.fillText(text, 0, 0);
         }
         ctx.restore();
-
-        setResult(getTopLabel(), config.id);
       }
+      if (draggingRef.current) getTopLabel();
     }
 
     //obtiene el label del sector del canvas que esta en la parte superior
@@ -273,8 +272,9 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg, theme }) => {
       const firstSegmentAngle = -Math.PI / slices.length;
       const topAngle = ((3 * Math.PI) / 2 - adjustedRotation - firstSegmentAngle + 2 * Math.PI) % (2 * Math.PI);
       const index = Math.floor(topAngle / angleStep) % slices.length;
-
-      return index;
+      if (setTopPosition !== index) {
+        setTopPosition(index);
+      }
     }
 
     //Calcula el angulo entre dos puntos usando el centro del canvas como punto central
@@ -304,25 +304,28 @@ const Wheel = ({ config, size, setResult, wheel, wheelImg, theme }) => {
       draggingRef.current = false;
     }
 
-    canvas.addEventListener("mousedown", handleMouseDown);
-    canvas.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
-
     function loop() {
       requestAnimationFrame(loop);
-      drawGame();
+      if (!solved) drawGame();
+      else clearEvents();
     }
 
-    loop();
-
-    return () => {
+    function clearEvents() {
       canvas.removeEventListener("mousedown", handleMouseDown);
       canvas.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [rotation, iconImages]);
+    }
+
+    canvas.addEventListener("mousedown", handleMouseDown);
+    canvas.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    getTopLabel();
+    loop();
+
+    return () => clearEvents();
+  }, [rotation, iconImages, solved, size]);
 
   return <canvas ref={canvasRef} style={{ zIndex: config.id }} />;
-};
+});
 
 export default Wheel;
