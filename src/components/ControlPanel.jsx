@@ -54,7 +54,6 @@ const ControlPanel = ({ show, onOpenScreen, loadConfig }) => {
 
   const irPuzzle = () => {
     onOpenScreen(KEYPAD_SCREEN);
-    console.log({ config: { theme, nWheels: ruedas.length }, wheels: ruedas });
     loadConfig({ config: { theme, nWheels: ruedas.length }, wheels: ruedas });
   };
   return (

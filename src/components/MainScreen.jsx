@@ -22,7 +22,6 @@ export default function MainScreen({ show, solvePuzzle, config, solved }) {
         height = windowHeight * 0.9;
         width = height * aspectRatio;
       }
-      console.log("size", { width, height });
 
       setSize({ width, height });
     };
@@ -74,6 +73,7 @@ export default function MainScreen({ show, solvePuzzle, config, solved }) {
               size={{ width: size.height * 0.242, height: size.height * 0.242 }}
               buttonImage={config.theme.buttonImg}
               buttonAudio={config.theme.buttonAudio}
+              solved={solved}
             />
           </div>
         )}

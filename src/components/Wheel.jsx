@@ -45,10 +45,12 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   const [rotation, setRotation] = useState(0);
   const [iconImages, setIconImages] = useState(null);
   const [topPosition, setTopPosition] = useState(-1);
+  const [gameEnded, setGameEnded] = useState(false);
+  const gameEndedRef = useRef(false);
   const centerX = size.width / 2;
   const centerY = size.height / 2;
   const radius = Math.min(centerX, centerY) - 2;
-  let slices = wheel.wheel;
+  const slices = wheel.wheel;
   const angleStep = (2 * Math.PI) / slices.length;
   const fontSize = size.width * 0.045 + config.id * 2;
   const iconSize = size.width * 0.1;
@@ -82,6 +84,14 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   useEffect(() => {
     if (theme.moveAudio) new Audio(theme.moveAudio).play();
   }, [topPosition]);
+
+  useEffect(() => {
+    if (solved && !gameEndedRef.current) {
+      gameEndedRef.current = false;
+      endGameAnimation(topPosition);
+    }
+    // eslint-disable-next-line
+  }, [solved]);
 
   useEffect(() => {
     if (!iconImages) return;
@@ -289,8 +299,8 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
     function loop() {
       requestAnimationFrame(loop);
-      if (!solved) drawGame();
-      else clearEvents();
+      if (!gameEnded) drawGame();
+      if (solved) clearEvents();
     }
 
     function clearEvents() {
@@ -307,6 +317,53 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
     return () => clearEvents();
   }, [rotation, iconImages, solved, size]);
+
+  // Calcula la rotación necesaria para que el segmento quede arriba
+  function getRotationForTopLabel(index) {
+    const offset = -Math.PI / slices.length;
+    const segmentAngle = (index + 0.5) * angleStep + offset;
+    // Queremos que ese ángulo esté en la posición de la flecha (3π/2)
+    return (3 * Math.PI) / 2 - segmentAngle;
+  }
+
+  function normalizeAngle(angle) {
+    return ((angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+  }
+
+  //Calcula el camino mas corto entre dos angulos para evitar vueltas innecesarias
+  function shortestAngleDifference(from, to) {
+    const a = normalizeAngle(from);
+    const b = normalizeAngle(to);
+    let diff = b - a;
+
+    if (diff > Math.PI) diff -= 2 * Math.PI;
+    if (diff < -Math.PI) diff += 2 * Math.PI;
+
+    return diff;
+  }
+
+  //Animación de fin de juego que cuadra la rueda en el punto superior correcto
+  function endGameAnimation(endPoint) {
+    const angletopPosition = getRotationForTopLabel(endPoint);
+
+    setRotation((prevRotation) => {
+      let diff = shortestAngleDifference(prevRotation, angletopPosition);
+
+      if (Math.abs(diff) > 0.01) {
+        return prevRotation + Math.sign(diff) * Math.min(0.07, Math.abs(diff));
+      } else {
+        if (!gameEndedRef.current) {
+          gameEndedRef.current = true;
+          setGameEnded(true);
+        }
+        return angletopPosition;
+      }
+    });
+
+    if (!gameEndedRef.current) {
+      setTimeout(() => endGameAnimation(endPoint), 30);
+    }
+  }
 
   return <canvas ref={canvasRef} style={{ zIndex: config.id }} />;
 });
