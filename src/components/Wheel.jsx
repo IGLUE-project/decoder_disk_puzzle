@@ -153,12 +153,12 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         ctx.closePath();
 
         //shadow para bordes
-        if (theme.name === THEMES.FUTURISTIC) {
+        if (theme.skin === THEMES.FUTURISTIC) {
           ctx.shadowColor = "#DE0CFF";
           ctx.shadowOffsetX = 0;
           ctx.shadowOffsetY = 0;
           ctx.shadowBlur = 15;
-        } else if (theme.name === THEMES.CONTEMPORARY) {
+        } else if (theme.skin === THEMES.STANDARD) {
           ctx.shadowColor = "#2f2b4f";
           ctx.shadowOffsetX = 5;
           ctx.shadowOffsetY = 0;
@@ -185,7 +185,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         }
 
         // bordes de ruedas
-        if (theme.name === THEMES.CONTEMPORARY) {
+        if (theme.skin === THEMES.STANDARD) {
           ctx.strokeStyle = "#141f40";
         } else {
           ctx.strokeStyle = "#000000";
@@ -194,12 +194,12 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         ctx.stroke();
 
         // bordes de división segmentos según tema:
-        if (theme.name === THEMES.ANCIENT) {
+        if (theme.skin === THEMES.RETRO) {
           // Dibujar borde negro alrededor del área
           ctx.strokeStyle = "#222200";
           ctx.lineWidth = 4;
           ctx.stroke();
-        } else if (theme.name === THEMES.FUTURISTIC) {
+        } else if (theme.skin === THEMES.FUTURISTIC) {
           // resplandor
           ctx.shadowColor = "#DE0CFF";
           ctx.shadowOffsetX = 0;
@@ -210,7 +210,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
           ctx.strokeStyle = "#F7C5FF";
           ctx.lineWidth = 3;
           ctx.stroke();
-        } else if (theme.name === THEMES.CONTEMPORARY) {
+        } else if (theme.skin === THEMES.STANDARD) {
           // resplandor
           ctx.shadowColor = "#2f2b4f";
           ctx.shadowOffsetX = 0;

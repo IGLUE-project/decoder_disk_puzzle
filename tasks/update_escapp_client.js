@@ -18,7 +18,7 @@ if(!existsSync(escapp_library_path)){
 }
 
 let commands = [];
-commands.push('cd ' + escapp_library_path + ' && npm run production');
+commands.push('cd ' + escapp_library_path + ' && npm run build');
 
 let apps = ['../'];
 for(let i=0; i<apps.length; i++){

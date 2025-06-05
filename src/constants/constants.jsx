@@ -1,32 +1,49 @@
-export const PAINTING_SCREEN = "painting";
-export const SAFE_CLOSED_SCREEN = "safe_closed";
-export const SAFE_OPEN_SCREEN = "safe_open";
+export const DEFAULT_APP_SETTINGS = {
+  skin: "STANDARD",
+  actionAfterSolve: "NONE",
+  message: undefined,
+
+  backgroundImg: "",
+  wheelImg: "",
+  buttonImg: "",
+  moveAudio: "sounds/tick.wav",
+  buttonAudio: "sounds/button.wav",
+  repeatWheelImg: false,
+  wheels: [],
+};
+
+export const ESCAPP_CLIENT_SETTINGS = {
+  imagesPath: "./images/",
+};
+
+export const ALLOWED_ACTIONS = ["NONE", "SHOW_MESSAGE"];
+
 export const CONTROL_PANEL_SCREEN = "control_panel";
-export const KEYPAD_SCREEN = "keypad";
+export const KEYPAD_SCREEN = "main_screen";
 
 export const THEMES = {
-  BASIC: "basic",
-  FUTURISTIC: "futuristic",
-  CONTEMPORARY: "contemporary",
-  ANCIENT: "ancient",
+  BASIC: "BASIC",
+  FUTURISTIC: "FUTURISTIC",
+  STANDARD: "STANDARD",
+  RETRO: "RETRO",
 };
 export const WHEELTYPE = {
-  LETTERS: "letters",
-  NUMBERS: "numbers",
-  SHAPES: "shapes",
-  COLORED_SHAPES: "colored shapes",
-  COLORS: "colors",
-  CUSTOM: "custom",
+  LETTERS: "LETTERS",
+  NUMBERS: "NUMBERS",
+  SHAPES: "SHAPES",
+  COLORED_SHAPES: "COLORED SHAPES",
+  COLORS: "COLORS",
+  CUSTOM: "CUSTOM",
 };
 export const AREACOLOR = {
   NONE: "",
-  RAINBOW: "rainbow",
-  CUSTOM: "custom",
+  RAINBOW: "RAINBOW",
+  CUSTOM: "CUSTOM",
 };
 export const ICONS = ["circle", "triangle", "square", "pentagon", "star", "hexagon"];
 
 export const THEME_ASSETS = {
-  [THEMES.ANCIENT]: {
+  [THEMES.RETRO]: {
     backgroundImg: "/src/assets/images/ancient_background.png",
     wheelImg: "/src/assets/images/ancient_wheel.png",
     buttonImg: "/src/assets/images/ancient_button.png",
@@ -42,7 +59,7 @@ export const THEME_ASSETS = {
     buttonAudio: "sounds/button.wav",
     repeatWheelImg: false,
   },
-  [THEMES.CONTEMPORARY]: {
+  [THEMES.STANDARD]: {
     backgroundImg: "/src/assets/images/contemporary_background.png",
     wheelImg: "/src/assets/images/contemporary_wheel.png",
     buttonImg: "/src/assets/images/contemporary_button.png",

@@ -2,11 +2,11 @@ import * as Utils from './Utils.js';
 import {LOCALES} from '../config/locales.js';
 
 let APP_LOCALES;
-let availableLocales;
+let availableLocales = ["en","es","sr"];
 let defaultLocale;
 let locale;
 
-export function init(GLOBAL_CONFIG){
+export function init(appSettings){
   if(typeof APP_LOCALES !== "undefined"){
     //Already initialized
     return;
@@ -14,27 +14,25 @@ export function init(GLOBAL_CONFIG){
 
   //Set hardcoded locales and merge with config locales
   APP_LOCALES = LOCALES;
-  if(typeof GLOBAL_CONFIG.locales !== "undefined"){
-    APP_LOCALES = Utils.deepMerge(APP_LOCALES, GLOBAL_CONFIG.locales);
+  if(typeof appSettings.locales !== "undefined"){
+    APP_LOCALES = Utils.deepMerge(APP_LOCALES, appSettings.locales);
   }
 
-  // Set available locales
-  if((typeof GLOBAL_CONFIG.availableLocales !== "undefined") && (GLOBAL_CONFIG.availableLocales instanceof Array) && (GLOBAL_CONFIG.availableLocales.length > 0)){
-    availableLocales = GLOBAL_CONFIG.availableLocales;
-  } else {
-    availableLocales = ["en"];
+  // Override available locales if forced by config
+  if((typeof appSettings.availableLocales !== "undefined") && (appSettings.availableLocales instanceof Array) && (appSettings.availableLocales.length > 0)){
+    availableLocales = appSettings.availableLocales;
   }
 
   // Set default locale
-  if(isValidLocale(GLOBAL_CONFIG.defaultLocale)){
-    defaultLocale = GLOBAL_CONFIG.defaultLocale;
+  if(isValidLocale(appSettings.defaultLocale)){
+    defaultLocale = appSettings.defaultLocale;
   } else {
-    defaultLocale = GLOBAL_CONFIG.availableLocales[0];
+    defaultLocale = availableLocales[0];
   }
 
   //Set locale (1. Force by config, 2. URL, 3. Web browser)
-  if(isValidLocale(GLOBAL_CONFIG.locale)){
-    locale = GLOBAL_CONFIG.locale;
+  if(isValidLocale(appSettings.locale)){
+    locale = appSettings.locale;
   } else {
     let uL = getUserLocale();
     if(isValidLocale(uL)){
@@ -94,12 +92,12 @@ function isValidLocale(locale){
 };
 
 export function getTrans(s, params){
-  // First language
+  // First locale
   if((typeof APP_LOCALES[locale] !== "undefined") && (typeof APP_LOCALES[locale][s] === "string")){
     return getTransWithParams(APP_LOCALES[locale][s], params);
   }
 
-  // Default language
+  // Default locale
   if((locale !== defaultLocale) && (typeof APP_LOCALES[defaultLocale] !== "undefined") && (typeof APP_LOCALES[defaultLocale][s] === "string")){
     return getTransWithParams(APP_LOCALES[defaultLocale][s], params);
   }
@@ -110,7 +108,7 @@ export function getTrans(s, params){
 /*
  * Replace params (if they are provided) in the translations keys. Example:
  * // "i.dtest"	: "Download #{name}",
- * // getTrans("i.dtest", {name: "SCORM package"}) -> "Download SCORM package"
+ * // getTrans("i.dtest", {name: "escape room"}) -> "Download escape room"
  */
 function getTransWithParams(trans, params){
   if(typeof params !== "object"){

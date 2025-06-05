@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "./../assets/scss/ControlPanel.scss";
-import { AREACOLOR, ICONS, KEYPAD_SCREEN, THEMES, WHEELTYPE } from "../constants/constants";
+import { AREACOLOR, ICONS, THEMES, WHEELTYPE } from "../constants/constants";
 
-const ControlPanel = ({ show, onOpenScreen, loadConfig }) => {
-  const [theme, setTheme] = useState("basic");
+const ControlPanel = ({ loadConfig }) => {
+  const [theme, setTheme] = useState("BASIC");
   const [ruedas, setRuedas] = useState([]);
 
   const añadirRueda = () => {
@@ -53,15 +53,10 @@ const ControlPanel = ({ show, onOpenScreen, loadConfig }) => {
   };
 
   const irPuzzle = () => {
-    onOpenScreen(KEYPAD_SCREEN);
     loadConfig({ config: { theme, nWheels: ruedas.length }, wheels: ruedas });
   };
   return (
-    <div
-      id="ControlPanel"
-      className={"screen_wrapper" + (show ? "" : " screen_hidden")}
-      style={{ alignItems: "center" }}
-    >
+    <div id="ControlPanel" style={{ alignItems: "center" }}>
       <div
         className="frame"
         style={{

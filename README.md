@@ -1,8 +1,11 @@
-# React + Vite
+# Escapp Keypad Puzzle
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This software is a web application for creating escape room puzzles for Escapp, an open-source web platform for creating and conducting educational escape rooms whose source code is available at [https://github.com/iglue-project/escapp](https://github.com/iglue-project/escapp).
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Funding
+
+This software has been co-funded by the European Union under the Erasmus+ Programme (Project reference <a href="https://iglue.dit.upm.es" target="_blank">2024-1-ES01-KA220-HED-000256356</a>).
+
+<img src="https://github.com/user-attachments/assets/9760cf7f-a06b-4509-8281-4174c235fc43" width="300">

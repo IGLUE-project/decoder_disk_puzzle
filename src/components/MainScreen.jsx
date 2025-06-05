@@ -3,11 +3,13 @@ import "./../assets/scss/MainScreen.scss";
 import RoundButton from "./RoundButton";
 import Wheel from "./Wheel";
 
-export default function MainScreen({ show, solvePuzzle, config, solved }) {
+export default function MainScreen({ solvePuzzle, config, solved }) {
   const [size, setSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const refs = useRef(null);
+  const [refsLoaded, setRefsLoaded] = useState(0);
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,7 +33,11 @@ export default function MainScreen({ show, solvePuzzle, config, solved }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const refs = useRef([...Array(config.wheels.length)].map(() => React.createRef()));
+  useEffect(() => {
+    if (!config) return;
+    refs.current = [...Array(config.wheels.length)].map(() => React.createRef());
+    setRefsLoaded((prev) => prev + 1);
+  }, [config]);
 
   const pedirResultados = () => {
     const resultados = refs.current.map((ref) => ref.current?.getResult()).filter((r) => r !== undefined);
@@ -40,9 +46,9 @@ export default function MainScreen({ show, solvePuzzle, config, solved }) {
   };
 
   return (
-    <div id="MainScreen" className={"screen_wrapper" + (show ? "" : " screen_hidden")}>
+    <div id="MainScreen">
       <div className="frame">
-        {config.wheels && (
+        {config?.wheels && refs.current && (
           <div
             className="wheels"
             style={{
@@ -57,8 +63,8 @@ export default function MainScreen({ show, solvePuzzle, config, solved }) {
                 key={index}
                 ref={refs.current[index]}
                 wheel={wheel}
-                theme={config.theme}
-                wheelImg={config.theme.wheelImg}
+                theme={config}
+                wheelImg={config.wheelImg}
                 config={{ id: config.wheels.length - index }}
                 size={{
                   width: size.height * 0.424 + size.height * 0.182 * index,
@@ -67,12 +73,12 @@ export default function MainScreen({ show, solvePuzzle, config, solved }) {
                 solved={solved}
               />
             ))}
-            <div className="wheel_shadow" id={`wheel_shadow_${config.theme.name}`}></div>
+            <div className="wheel_shadow" id={`wheel_shadow_${config.skin}`}></div>
             <RoundButton
               onClick={pedirResultados}
               size={{ width: size.height * 0.242, height: size.height * 0.242 }}
-              buttonImage={config.theme.buttonImg}
-              buttonAudio={config.theme.buttonAudio}
+              buttonImage={config.buttonImg}
+              buttonAudio={config.buttonAudio}
               solved={solved}
             />
           </div>

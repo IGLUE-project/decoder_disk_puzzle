@@ -1,21 +1,7 @@
-export function isPDFSupported(){
-  var pdfReaderSupport = false;
-  if((typeof navigator.mimeTypes == "object")&&("application/pdf" in navigator.mimeTypes)){
-    pdfReaderSupport = true;
+export function log (...args) {
+  if (import.meta.env.DEV) {
+    console.log(...args);
   }
-  return pdfReaderSupport;
-};
-
-export function isImage(url){
-  if(typeof url === "string"){
-  	//Remove options
-	url = url.split('?')[0];
-	let extension = (url.split('.').pop().split('&')[0]).toLowerCase();
-	if(["jpg","jpeg","png","gif","bmp","svg"].indexOf(extension)!="-1"){
-		return true;
-	}
-  }
-  return false;
 };
 
 export function deepMerge(h1,h2){
@@ -37,4 +23,136 @@ export function deepMerge(h1,h2){
 
 export function replaceAll(string, find, replace){
   return string.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
+};
+
+export function isValidURL(string) {
+  try {
+    const url = new URL(string);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch (e) {
+    return false;
+  }
+};
+
+export function checkUrlProtocol(url){
+  if(isValidURL(url)){
+    let protocolMatch = (url).match(/^https?:\/\//);
+    if((protocolMatch instanceof Array)&&(protocolMatch.length === 1)){
+      let urlProtocol = protocolMatch[0].replace(":\/\/","");
+      let appProtocol = _getProtocol();
+      if(urlProtocol != appProtocol){
+        switch(appProtocol){
+          case "https":
+            //Try to load HTTP url over HTTPs
+            url = "https" + url.replace(urlProtocol,""); //replace first
+            break;
+          case "http":
+            //Try to load HTTPs url over HTTP
+            //Do nothing
+            break;
+          default:
+            //App is not loaded over HTTP or HTTPs
+            break;
+        }
+      }
+    }
+  }
+  return url;
+};
+
+export function checkUrlProtocols(obj) {
+  if (typeof obj === "string") {
+    return checkUrlProtocol(obj);
+  } else if (Array.isArray(obj)) {
+    return obj.map(item => checkUrlProtocols(item));
+  } else if (obj !== null && typeof obj === "object") {
+    const newObj = {};
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        newObj[key] = checkUrlProtocols(obj[key]);
+      }
+    }
+    return newObj;
+  } else {
+    return obj;
+  }
+}
+
+let _getProtocol = function(){
+  let protocol;
+  try {
+    protocol = document.location.protocol;
+  } catch(e){}
+
+  if(typeof protocol == "string"){
+    let protocolMatch = protocol.match(/[\w]+/);
+    if((protocolMatch instanceof Array)&&(typeof protocolMatch[0] == "string")){
+      protocol = protocolMatch[0];
+    } else {
+      protocol = "unknown";
+    }
+  }
+  return protocol;
+};
+
+export function preloadImages(images){
+  if (!Array.isArray(images)) {
+    return;
+  }
+  for (const url of images) {
+    if (isImage(url)) {
+      const img = new Image();
+      img.src = url;
+    } 
+  }
+};
+
+export function preloadAudios(sources){
+  if (!Array.isArray(sources)) {
+    return;
+  }
+  sources.forEach(src => {
+    const audio = new Audio();
+    audio.src = src;
+    audio.preload = "auto";
+  });
+};
+
+export function preloadVideos(sources) {
+  if (!Array.isArray(sources)) {
+    return;
+  }
+
+  sources.forEach(src => {
+    const video = document.createElement("video");
+    video.src = src;
+    video.preload = "auto";
+    video.muted = true;
+    video.style.display = "none";
+    document.body.appendChild(video);
+  });
+}
+
+export function isImage(url){
+  return _hasExtension(["jpg","jpeg","png","gif","bmp","svg"],url);
+};
+
+let _hasExtension = function(extensions,url){
+  if(typeof url === "string"){
+    //Remove options
+    url = url.split('?')[0];
+    let extension = (url.split('.').pop().split('&')[0]).toLowerCase();
+    if(extensions.indexOf(extension)!="-1"){
+      return true;
+    }
+  }
+  return false;
+};
+
+export function isPDFSupported(){
+  let pdfReaderSupport = false;
+  if((typeof navigator.mimeTypes == "object")&&("application/pdf" in navigator.mimeTypes)){
+    pdfReaderSupport = true;
+  }
+  return pdfReaderSupport;
 };
