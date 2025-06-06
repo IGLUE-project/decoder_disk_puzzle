@@ -3,7 +3,7 @@ import "./../assets/scss/MainScreen.scss";
 import RoundButton from "./RoundButton";
 import Wheel from "./Wheel";
 
-export default function MainScreen({ solvePuzzle, config, solved }) {
+export default function MainScreen({ solvePuzzle, config, solved, solution }) {
   const [size, setSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -12,8 +12,10 @@ export default function MainScreen({ solvePuzzle, config, solved }) {
   const [refsLoaded, setRefsLoaded] = useState(0);
 
   useEffect(() => {
-    if (solved && config.winAudio) new Audio(config.winAudio).play();
-  }, [solved]);
+    if (solved && solution) {
+      setSolutions(solution);
+    }
+  }, [solved, solution, refsLoaded]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -49,8 +51,23 @@ export default function MainScreen({ solvePuzzle, config, solved }) {
     solvePuzzle(resultadosObj);
   };
 
+  const setSolutions = (solutions) => {
+    const parsedSolutions = solutions
+      .split(",")
+      .map(Number)
+      .map((n) => n - 1)
+      .reverse();
+    if (!refs.current) return;
+    if (refs.current[0]) new Audio(config.winAudio).play();
+    refs.current.forEach((ref, index) => {
+      if (ref.current) {
+        ref.current.setSolution(parsedSolutions[index]);
+      }
+    });
+  };
+
   return (
-    <div id="MainScreen">
+    <div id="MainScreen" className={solved ? "solved" : ""}>
       <div className="frame">
         {config?.wheels && refs.current && (
           <div

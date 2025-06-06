@@ -22,8 +22,8 @@ export default function App() {
     useContext(GlobalContext);
   const hasExecutedEscappValidation = useRef(false);
   const escappLoaded = useRef(false);
-  const solution = useRef(null);
 
+  const [solution, setSolution] = useState(null);
   const [loading, setLoading] = useState(true);
   const [screen, setScreen] = useState(KEYPAD_SCREEN);
   const prevScreen = useRef(screen);
@@ -92,42 +92,17 @@ export default function App() {
     if (screen !== prevScreen.current) {
       Utils.log("Screen ha cambiado de", prevScreen.current, "a", screen);
       prevScreen.current = screen;
-      saveAppState();
     }
   }, [screen]);
 
   function restoreAppState(erState) {
     Utils.log("Restore application state based on escape room state:", erState);
+    // Si el puzle está resuelto lo ponemos en posicion de resuelto
     if (escapp.getAllPuzzlesSolved()) {
       if (appSettings.actionAfterSolve === "SHOW_MESSAGE") {
         setSolved(true);
+        setSolution(erState.puzzleData[escapp.getSettings().nextPuzzleId].solution || null);
       }
-    } else {
-      //Puzzle not solved. Restore app state based on local storage.
-      restoreAppStateFromLocalStorage();
-    }
-  }
-
-  function restoreAppStateFromLocalStorage() {
-    if (typeof Storage !== "undefined") {
-      let stateToRestore = Storage.getSetting("state");
-      if (stateToRestore) {
-        Utils.log("Restore app state", stateToRestore);
-        if (typeof stateToRestore.solution === "string") {
-          solution.current = stateToRestore.solution;
-        }
-      }
-    }
-  }
-
-  function saveAppState() {
-    if (typeof Storage !== "undefined") {
-      let currentAppState = { screen: screen };
-      if (screen === KEYPAD_SCREEN) {
-        currentAppState.solution = solution.current;
-      }
-      Utils.log("Save app state in local storage", currentAppState);
-      Storage.saveSetting("state", currentAppState);
     }
   }
 
@@ -222,24 +197,24 @@ export default function App() {
     const parsedSolution = Object.values(_solution)
       .map((value) => value + 1)
       .join(",");
-    solution.current = parsedSolution;
+    setSolution(parsedSolution);
 
     switch (appSettings.actionAfterSolve) {
       case "SHOW_MESSAGE":
-        return checkResult();
+        return checkResult(parsedSolution);
       case "NONE":
       default:
-        return submitPuzzleSolution();
+        return submitPuzzleSolution(parsedSolution);
     }
   }
-  function checkResult() {
-    escapp.checkNextPuzzle(solution.current, {}, (success, erState) => {
+  function checkResult(_solution) {
+    escapp.checkNextPuzzle(_solution, {}, (success, erState) => {
       Utils.log("Check solution Escapp response", success, erState);
       if (success) {
         setSolved(true);
         try {
           setTimeout(() => {
-            submitPuzzleSolution();
+            submitPuzzleSolution(_solution);
           }, 2000);
         } catch (e) {
           Utils.log("Error in checkNextPuzzle", e);
@@ -247,14 +222,14 @@ export default function App() {
       }
     });
   }
-  function submitPuzzleSolution() {
-    Utils.log("Submit puzzle solution", solution.current);
+  function submitPuzzleSolution(_solution) {
+    Utils.log("Submit puzzle solution", _solution);
 
-    escapp.submitNextPuzzle(solution.current, {}, (success, erState) => {
+    escapp.submitNextPuzzle(_solution, {}, (success, erState) => {
       if (!success) {
         setSolved(true);
       }
-      Utils.log("Solution submitted to Escapp", solution.current, success, erState);
+      Utils.log("Solution submitted to Escapp", _solution, success, erState);
     });
   }
 
@@ -280,7 +255,7 @@ export default function App() {
           className="main-background"
           style={{ backgroundImage: appSettings?.backgroundImg ? `url(${appSettings.backgroundImg})` : {} }}
         >
-          <MainScreen solvePuzzle={solvePuzzle} config={appSettings} solved={solved} />{" "}
+          <MainScreen solvePuzzle={solvePuzzle} config={appSettings} solved={solved} solution={solution} />
         </div>
       ),
     },

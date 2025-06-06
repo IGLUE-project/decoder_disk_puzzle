@@ -23,3 +23,10 @@ canvas {
   background-color: rgba(89, 90, 173, 0.527);
   filter: blur(12px);
 }
+
+.solved canvas {
+  cursor: auto;
+  &:active {
+    cursor: auto;
+  }
+}

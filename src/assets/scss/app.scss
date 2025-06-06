@@ -10,6 +10,12 @@ div.screen_wrapper {
   border: none;
   overflow: hidden;
 }
+* {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
 
 div.screen_wrapper {
   position: absolute;

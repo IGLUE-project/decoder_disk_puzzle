@@ -59,6 +59,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
   useImperativeHandle(ref, () => ({
     getResult: () => ({ id: config.id, value: topPosition }),
+    setSolution: (solution) => endGameAnimation(solution),
   }));
 
   useEffect(() => {
@@ -86,12 +87,6 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
     if (theme.moveAudio && !firstLoad) new Audio(theme.moveAudio).play();
     else setFirstLoad(false);
   }, [topPosition]);
-
-  useEffect(() => {
-    if (solved && !gameEndedRef.current) {
-      endGameAnimation(topPosition);
-    }
-  }, [solved]);
 
   useEffect(() => {
     if (!iconImages) return;
@@ -352,7 +347,9 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
     } else {
       if (!gameEndedRef.current) {
         gameEndedRef.current = true;
-        setGameEnded(true);
+        setTimeout(() => {
+          setGameEnded(true);
+        }, 1000);
       }
       rotation.current = angletopPosition;
     }
