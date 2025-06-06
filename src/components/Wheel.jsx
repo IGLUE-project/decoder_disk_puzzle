@@ -42,15 +42,15 @@ const preloadIcons = (slices, wheelImg) => {
 const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref) => {
   const canvasRef = useRef(null);
   const draggingRef = useRef(false);
-  const [rotation, setRotation] = useState(0);
-  const [iconImages, setIconImages] = useState(null);
-  const [topPosition, setTopPosition] = useState(-1);
-  const [gameEnded, setGameEnded] = useState(false);
   const gameEndedRef = useRef(false);
+  const [topPosition, setTopPosition] = useState(-1);
+  const [iconImages, setIconImages] = useState(null);
+  const [gameEnded, setGameEnded] = useState(false);
   const centerX = size.width / 2;
   const centerY = size.height / 2;
   const radius = Math.min(centerX, centerY) - 2;
   const slices = wheel.wheel;
+  const rotation = useRef(-Math.PI / 2); // Inicia la rotación para que el primer segmento esté arriba
   const angleStep = (2 * Math.PI) / slices.length;
   const fontSize = size.width * 0.045 + config.id * 2;
   const iconSize = size.width * 0.1;
@@ -109,7 +109,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         ctx.save();
 
         ctx.translate(centerX, centerY);
-        ctx.rotate(rotation);
+        ctx.rotate(rotation.current);
         ctx.translate(-centerX, -centerY);
 
         const offset = (config.id - 1) * 150;
@@ -131,7 +131,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
       ctx.save();
       ctx.translate(centerX, centerY);
-      ctx.rotate(rotation);
+      ctx.rotate(rotation.current);
       ctx.translate(-centerX, -centerY);
 
       drawRoulette();
@@ -261,11 +261,11 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
     //obtiene el label del sector del canvas que esta en la parte superior
     function getTopLabel() {
-      const adjustedRotation = ((rotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+      const adjustedRotation = ((rotation.current % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
       const firstSegmentAngle = -Math.PI / slices.length;
       const topAngle = ((3 * Math.PI) / 2 - adjustedRotation - firstSegmentAngle + 2 * Math.PI) % (2 * Math.PI);
       const index = Math.floor(topAngle / angleStep) % slices.length;
-      if (setTopPosition !== index) {
+      if (topPosition !== index) {
         setTopPosition(index);
       }
     }
@@ -289,7 +289,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
       mouseY = (e.clientY - rect.top) * (size.height / rect.height);
       if (draggingRef.current) {
         const angle = calcularAngulo(prevX, prevY, mouseX, mouseY);
-        setRotation((prevRotation) => prevRotation + angle);
+        rotation.current += angle;
       }
     }
 
@@ -298,6 +298,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
     }
 
     function loop() {
+      console.log("loop");
       requestAnimationFrame(loop);
       if (!gameEnded) drawGame();
       if (solved) clearEvents();
@@ -316,7 +317,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
     loop();
 
     return () => clearEvents();
-  }, [rotation, iconImages, solved, size]);
+  }, [iconImages, solved, size]);
 
   // Calcula la rotación necesaria para que el segmento quede arriba
   function getRotationForTopLabel(index) {
@@ -346,19 +347,17 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   function endGameAnimation(endPoint) {
     const angletopPosition = getRotationForTopLabel(endPoint);
 
-    setRotation((prevRotation) => {
-      let diff = shortestAngleDifference(prevRotation, angletopPosition);
+    let diff = shortestAngleDifference(rotation.current, angletopPosition);
 
-      if (Math.abs(diff) > 0.01) {
-        return prevRotation + Math.sign(diff) * Math.min(0.07, Math.abs(diff));
-      } else {
-        if (!gameEndedRef.current) {
-          gameEndedRef.current = true;
-          setGameEnded(true);
-        }
-        return angletopPosition;
+    if (Math.abs(diff) > 0.01) {
+      rotation.current += Math.sign(diff) * Math.min(0.07, Math.abs(diff));
+    } else {
+      if (!gameEndedRef.current) {
+        gameEndedRef.current = true;
+        setGameEnded(true);
       }
-    });
+      rotation.current = angletopPosition;
+    }
 
     if (!gameEndedRef.current) {
       setTimeout(() => endGameAnimation(endPoint), 30);

@@ -21,22 +21,23 @@ export default function App() {
   const { escapp, setEscapp, appSettings, setAppSettings, Storage, setStorage, Utils, I18n } =
     useContext(GlobalContext);
   const hasExecutedEscappValidation = useRef(false);
+  const escappLoaded = useRef(false);
   const solution = useRef(null);
 
   const [loading, setLoading] = useState(true);
   const [screen, setScreen] = useState(KEYPAD_SCREEN);
   const prevScreen = useRef(screen);
-  const [config, setConfig] = useState();
   const [solved, setSolved] = useState(false);
 
   useEffect(() => {
     //Init Escapp client
-    if (escapp !== null) {
+    if (escapp !== null || escappLoaded.current) {
       return;
     }
     //Create the Escapp client instance.
     let _escapp = new ESCAPP(ESCAPP_CLIENT_SETTINGS);
     setEscapp(_escapp);
+    escappLoaded.current = true;
     Utils.log("Escapp client initiated with settings:", _escapp.getSettings());
 
     //Use the storage feature provided by Escapp client.
@@ -44,6 +45,7 @@ export default function App() {
 
     //Get app settings provided by the Escapp server.
     let _appSettings = processAppSettings(_escapp.getAppSettings());
+    setAppSettings(_appSettings);
   }, []);
 
   useEffect(() => {
@@ -97,7 +99,7 @@ export default function App() {
   function restoreAppState(erState) {
     Utils.log("Restore application state based on escape room state:", erState);
     if (escapp.getAllPuzzlesSolved()) {
-      if (appSettings.actionAfterSolve === "SHOW_MESSAGE" && screen !== KEYPAD_SCREEN) {
+      if (appSettings.actionAfterSolve === "SHOW_MESSAGE") {
         setSolved(true);
       }
     } else {
@@ -111,7 +113,6 @@ export default function App() {
       let stateToRestore = Storage.getSetting("state");
       if (stateToRestore) {
         Utils.log("Restore app state", stateToRestore);
-        //setScreen(stateToRestore.screen);
         if (typeof stateToRestore.solution === "string") {
           solution.current = stateToRestore.solution;
         }
@@ -200,7 +201,6 @@ export default function App() {
     Utils.preloadImages([_appSettings.backgroundMessage]);
     //Utils.preloadAudios([_appSettings.soundBeep,_appSettings.soundNok,_appSettings.soundOk]); //Preload done through HTML audio tags
     //Utils.preloadVideos(["videos/some_video.mp4"]);
-    setAppSettings(_appSettings);
     Utils.log("App settings:", _appSettings);
     return _appSettings;
   }
@@ -212,67 +212,9 @@ export default function App() {
     baseConfig.wheelsType = wheels;
     baseConfig.skin = config.theme || "BASIC";
     baseConfig.numberOfWheels = config.nWheels || 3;
-    processAppSettings(baseConfig);
-
-    let configuration = {
-      theme: {
-        name: config.theme,
-        ...(THEME_ASSETS[config.theme] || {}),
-      },
-      wheels: [],
-    };
-
-    for (let i = 0; i < config.nWheels; i++) {
-      const wheel = wheels[i];
-      let newWheel = wheel ? { ...wheel, wheel: [] } : null;
-
-      if (newWheel) {
-        let wheelData;
-        switch (wheel.type) {
-          case WHEELTYPE.NUMBERS:
-            wheelData = (_, j) => ({ label: j + 1 });
-            break;
-          case WHEELTYPE.COLORS:
-            wheelData = () => ({ label: "" });
-            break;
-          case WHEELTYPE.SHAPES:
-            wheelData = (_, j) => ({ ico: ICONS[j % ICONS.length] || "" });
-            break;
-          case WHEELTYPE.COLORED_SHAPES:
-            wheelData = (_, j) => ({ ico: ICONS[j % ICONS.length] || "", colorIco: AREACOLOR.RAINBOW });
-            break;
-          case WHEELTYPE.CUSTOM:
-            newWheel.wheel = wheel.customWheel;
-            break;
-          default:
-            wheelData = (_, j) => ({ label: String.fromCharCode(65 + (j % 26)) });
-        }
-
-        if (wheel.type !== WHEELTYPE.CUSTOM) {
-          newWheel.wheel = Array.from({ length: wheel.length }, wheelData);
-        }
-        configuration.wheels.push(newWheel);
-      } else {
-        configuration.wheels.push({
-          type: WHEELTYPE.LETTERS,
-          length: 6,
-          wheel: Array.from({ length: 6 }, (_, j) => ({ label: String.fromCharCode(65 + j) })),
-        });
-      }
-    }
-    console.log(configuration);
-    setConfig(configuration);
+    const newConfig = processAppSettings(baseConfig);
+    setAppSettings(newConfig);
   }
-
-  // const solvePuzzle = (solution) => {
-  //   const parsedSolution = Object.values(solution)
-  //     .map((value) => value + 1)
-  //     .join(",");
-  //   console.log(parsedSolution);
-  //   escapp.submitPuzzle(GLOBAL_CONFIG.escapp.puzzleId, parsedSolution, {}, (success) => {
-  //     setSolved(success);
-  //   });
-  // };
 
   function solvePuzzle(_solution) {
     Utils.log("solution: ", _solution);
@@ -298,7 +240,7 @@ export default function App() {
         try {
           setTimeout(() => {
             submitPuzzleSolution();
-          }, 1500);
+          }, 2000);
         } catch (e) {
           Utils.log("Error in checkNextPuzzle", e);
         }
