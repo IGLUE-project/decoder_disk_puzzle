@@ -43,7 +43,8 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   const canvasRef = useRef(null);
   const draggingRef = useRef(false);
   const gameEndedRef = useRef(false);
-  const [topPosition, setTopPosition] = useState(-1);
+  const [firstLoad, setFirstLoad] = useState(true);
+  const [topPosition, setTopPosition] = useState(0);
   const [iconImages, setIconImages] = useState(null);
   const [gameEnded, setGameEnded] = useState(false);
   const centerX = size.width / 2;
@@ -82,15 +83,14 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   }, []);
 
   useEffect(() => {
-    if (theme.moveAudio) new Audio(theme.moveAudio).play();
+    if (theme.moveAudio && !firstLoad) new Audio(theme.moveAudio).play();
+    else setFirstLoad(false);
   }, [topPosition]);
 
   useEffect(() => {
     if (solved && !gameEndedRef.current) {
-      gameEndedRef.current = false;
       endGameAnimation(topPosition);
     }
-    // eslint-disable-next-line
   }, [solved]);
 
   useEffect(() => {
@@ -265,9 +265,8 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
       const firstSegmentAngle = -Math.PI / slices.length;
       const topAngle = ((3 * Math.PI) / 2 - adjustedRotation - firstSegmentAngle + 2 * Math.PI) % (2 * Math.PI);
       const index = Math.floor(topAngle / angleStep) % slices.length;
-      if (topPosition !== index) {
-        setTopPosition(index);
-      }
+
+      setTopPosition(index);
     }
 
     //Calcula el angulo entre dos puntos usando el centro del canvas como punto central
@@ -298,7 +297,6 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
     }
 
     function loop() {
-      console.log("loop");
       requestAnimationFrame(loop);
       if (!gameEnded) drawGame();
       if (solved) clearEvents();
