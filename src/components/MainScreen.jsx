@@ -12,6 +12,10 @@ export default function MainScreen({ solvePuzzle, config, solved }) {
   const [refsLoaded, setRefsLoaded] = useState(0);
 
   useEffect(() => {
+    if (solved && config.winAudio) new Audio(config.winAudio).play();
+  }, [solved]);
+
+  useEffect(() => {
     const handleResize = () => {
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;

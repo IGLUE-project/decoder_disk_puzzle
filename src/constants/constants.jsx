@@ -8,6 +8,7 @@ export const DEFAULT_APP_SETTINGS = {
   buttonImg: "",
   moveAudio: "sounds/tick.wav",
   buttonAudio: "sounds/button.wav",
+  winAudio: "sounds/win_sound.mp3",
   repeatWheelImg: false,
   wheels: [],
 };
@@ -49,6 +50,7 @@ export const THEME_ASSETS = {
     buttonImg: "/src/assets/images/ancient_button.png",
     moveAudio: "sounds/ancient_wheel.wav",
     buttonAudio: "sounds/button-stone.wav",
+    winAudio: "sounds/win_sound.mp3",
     repeatWheelImg: false,
   },
   [THEMES.BASIC]: {
@@ -57,6 +59,7 @@ export const THEME_ASSETS = {
     buttonImg: "",
     moveAudio: "sounds/tick.wav",
     buttonAudio: "sounds/button.wav",
+    winAudio: "sounds/win_sound.mp3",
     repeatWheelImg: false,
   },
   [THEMES.STANDARD]: {
@@ -65,6 +68,7 @@ export const THEME_ASSETS = {
     buttonImg: "/src/assets/images/contemporary_button.png",
     moveAudio: "sounds/tick.wav",
     buttonAudio: "sounds/button.wav",
+    winAudio: "sounds/win_sound.mp3",
     repeatWheelImg: true,
   },
   [THEMES.FUTURISTIC]: {
@@ -73,6 +77,7 @@ export const THEME_ASSETS = {
     buttonImg: "/src/assets/images/futuristic_button.png",
     moveAudio: "sounds/futuristic_wheel.wav",
     buttonAudio: "sounds/futuristic_button.mp3",
+    winAudio: "sounds/win_sound.mp3",
     repeatWheelImg: false,
   },
 };
