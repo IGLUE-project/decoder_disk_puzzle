@@ -18,10 +18,8 @@ import MainScreen from "./MainScreen.jsx";
 import { GlobalContext } from "./GlobalContext.jsx";
 
 export default function App() {
-  const { escapp, setEscapp, appSettings, setAppSettings, Storage, setStorage, Utils, I18n } =
-    useContext(GlobalContext);
+  const { escapp, setEscapp, appSettings, setAppSettings, Storage, setStorage, Utils, I18n } = useContext(GlobalContext);
   const hasExecutedEscappValidation = useRef(false);
-  const escappLoaded = useRef(false);
 
   const [solution, setSolution] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -31,13 +29,12 @@ export default function App() {
 
   useEffect(() => {
     //Init Escapp client
-    if (escapp !== null || escappLoaded.current) {
+    if (escapp !== null) {
       return;
     }
     //Create the Escapp client instance.
     let _escapp = new ESCAPP(ESCAPP_CLIENT_SETTINGS);
     setEscapp(_escapp);
-    escappLoaded.current = true;
     Utils.log("Escapp client initiated with settings:", _escapp.getSettings());
 
     //Use the storage feature provided by Escapp client.
@@ -251,10 +248,7 @@ export default function App() {
     {
       id: KEYPAD_SCREEN,
       content: (
-        <div
-          className="main-background"
-          style={{ backgroundImage: appSettings?.backgroundImg ? `url(${appSettings.backgroundImg})` : {} }}
-        >
+        <div className="main-background" style={{ backgroundImage: appSettings?.backgroundImg ? `url(${appSettings.backgroundImg})` : {} }}>
           <MainScreen solvePuzzle={solvePuzzle} config={appSettings} solved={solved} solution={solution} />
         </div>
       ),
@@ -268,9 +262,7 @@ export default function App() {
   return (
     <div
       id="global_wrapper"
-      className={`${
-        appSettings !== null && typeof appSettings.skin === "string" ? appSettings.skin.toLowerCase() : ""
-      }`}
+      className={`${appSettings !== null && typeof appSettings.skin === "string" ? appSettings.skin.toLowerCase() : ""}`}
     >
       {renderScreens(screens)}
     </div>

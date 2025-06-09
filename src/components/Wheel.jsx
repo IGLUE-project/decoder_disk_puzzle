@@ -72,8 +72,8 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
           (img) =>
             new Promise((resolve) => {
               img.onload = resolve; // Resolvemos la promesa cuando la imagen se haya cargado
-            }),
-        ),
+            })
+        )
       );
 
       // Cuando todas las imágenes se han cargado, guardamos las imágenes
@@ -164,8 +164,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
         if (wheel.areaColor) {
           if (iconImages["wheelImg"]) {
-            if (wheel.areaColor === AREACOLOR.RAINBOW)
-              areaColor = `hsla(${(i * 360) / slices.length}, 100%, 50%, 0.20)`;
+            if (wheel.areaColor === AREACOLOR.RAINBOW) areaColor = `hsla(${(i * 360) / slices.length}, 100%, 50%, 0.20)`;
             else if (slices[i].areaColor && slices[i].areaColor[0] === "#") areaColor = slices[i].areaColor + "33";
           } else {
             if (wheel.areaColor === AREACOLOR.RAINBOW) areaColor = `hsla(${(i * 360) / slices.length}, 100%, 50%)`;
@@ -293,7 +292,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
     function loop() {
       requestAnimationFrame(loop);
-      if (!gameEnded) drawGame();
+      drawGame();
       if (solved) clearEvents();
     }
 
