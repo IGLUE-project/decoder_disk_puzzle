@@ -17,7 +17,7 @@ export const ESCAPP_CLIENT_SETTINGS = {
   imagesPath: "./images/",
 };
 
-export const ALLOWED_ACTIONS = ["NONE", "SHOW_MESSAGE"];
+export const ALLOWED_ACTIONS = ["NONE", "LOAD_SOLUTION"];
 
 export const CONTROL_PANEL_SCREEN = "control_panel";
 export const KEYPAD_SCREEN = "main_screen";
