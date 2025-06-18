@@ -32,10 +32,22 @@ div.cover {
   background: #f5f5f5;
 }
 
+.solved .button {
+  background-color: #61bb0c;
+  &:hover {
+    background-color: #61bb0c;
+  }
+  &:active {
+    box-shadow: none;
+  }
+}
+
 .button:active {
   box-shadow: 0px 3px 4px #aaa inset, 0px 2px 3px #fff;
 }
 .solved div.cover {
+  cursor: auto;
+
   img {
     cursor: auto;
   }

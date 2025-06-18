@@ -16,7 +16,6 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
     if (solved && solution && refsLoaded) {
       const now = Date.now();
       const elapsed = now - winAudioOffset.current;
-      console.log(elapsed);
       const delay = Math.max(0, 1200 - elapsed);
 
       const timeout = setTimeout(() => {

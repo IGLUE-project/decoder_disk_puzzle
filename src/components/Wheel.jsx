@@ -153,7 +153,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
           ctx.shadowOffsetX = 0;
           ctx.shadowOffsetY = 0;
           ctx.shadowBlur = 15;
-        } else if (theme.skin === THEMES.STANDARD) {
+        } else if (theme.skin === THEMES.BASIC) {
           ctx.shadowColor = "#2f2b4f";
           ctx.shadowOffsetX = 5;
           ctx.shadowOffsetY = 0;
@@ -183,7 +183,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         }
 
         // bordes de ruedas
-        if (theme.skin === THEMES.STANDARD) {
+        if (theme.skin === THEMES.BASIC) {
           ctx.strokeStyle = "#141f40";
         } else {
           ctx.strokeStyle = "#000000";
@@ -208,7 +208,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
           ctx.strokeStyle = "#F7C5FF";
           ctx.lineWidth = 3;
           ctx.stroke();
-        } else if (theme.skin === THEMES.STANDARD) {
+        } else if (theme.skin === THEMES.BASIC) {
           // resplandor
           ctx.shadowColor = "#2f2b4f";
           ctx.shadowOffsetX = 0;

@@ -52,7 +52,7 @@ export const THEME_ASSETS = {
     winAudio: "sounds/win_sound.mp3",
     repeatWheelImg: false,
   },
-  [THEMES.BASIC]: {
+  [THEMES.STANDARD]: {
     backgroundImg: "",
     wheelImg: "",
     buttonImg: "",
@@ -61,7 +61,7 @@ export const THEME_ASSETS = {
     winAudio: "sounds/win_sound.mp3",
     repeatWheelImg: false,
   },
-  [THEMES.STANDARD]: {
+  [THEMES.BASIC]: {
     backgroundImg: "/src/assets/images/contemporary_background.png",
     wheelImg: "/src/assets/images/contemporary_wheel.png",
     buttonImg: "/src/assets/images/contemporary_button.png",

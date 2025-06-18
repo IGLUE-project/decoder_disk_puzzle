@@ -186,7 +186,7 @@ export default function App() {
     let skinSettings = THEME_ASSETS[config.theme] || {};
     let baseConfig = Utils.deepMerge(DEFAULT_APP_SETTINGS, skinSettings);
     baseConfig.wheelsType = wheels;
-    baseConfig.skin = config.theme || "BASIC";
+    baseConfig.skin = config.theme || "STANDARD";
     baseConfig.numberOfWheels = config.nWheels || 3;
     const newConfig = processAppSettings(baseConfig);
     setAppSettings(newConfig);
@@ -246,7 +246,10 @@ export default function App() {
     {
       id: KEYPAD_SCREEN,
       content: (
-        <div className="main-background" style={{ backgroundImage: appSettings?.backgroundImg ? `url(${appSettings.backgroundImg})` : {} }}>
+        <div
+          className={`main-background${solved ? " solved" : ""}`}
+          style={{ backgroundImage: appSettings?.backgroundImg ? `url(${appSettings.backgroundImg})` : {} }}
+        >
           <MainScreen solvePuzzle={solvePuzzle} config={appSettings} solved={solved} solution={solution} />
         </div>
       ),
