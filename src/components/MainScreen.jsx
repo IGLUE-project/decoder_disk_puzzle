@@ -9,11 +9,21 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
     height: window.innerHeight,
   });
   const refs = useRef(null);
+  const winAudioOffset = useRef(0);
   const [refsLoaded, setRefsLoaded] = useState(0);
 
   useEffect(() => {
-    if (solved && solution) {
-      setSolutions(solution);
+    if (solved && solution && refsLoaded) {
+      const now = Date.now();
+      const elapsed = now - winAudioOffset.current;
+      console.log(elapsed);
+      const delay = Math.max(0, 1200 - elapsed);
+
+      const timeout = setTimeout(() => {
+        setSolutions(solution);
+      }, delay);
+
+      return () => clearTimeout(timeout);
     }
   }, [solved, solution, refsLoaded]);
 
@@ -57,7 +67,7 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
         return [wheelIndex, result];
       })
     );
-
+    winAudioOffset.current = Date.now();
     solvePuzzle(resultadosObj);
   };
 
