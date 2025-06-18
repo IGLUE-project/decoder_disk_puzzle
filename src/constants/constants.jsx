@@ -1,6 +1,6 @@
 export const DEFAULT_APP_SETTINGS = {
   skin: "STANDARD",
-  actionAfterSolve: "NONE",
+  actionWhenLoadingIfSolved: true,
   message: undefined,
 
   backgroundImg: "",
@@ -16,8 +16,6 @@ export const DEFAULT_APP_SETTINGS = {
 export const ESCAPP_CLIENT_SETTINGS = {
   imagesPath: "./images/",
 };
-
-export const ALLOWED_ACTIONS = ["NONE", "SHOW_MESSAGE"];
 
 export const CONTROL_PANEL_SCREEN = "control_panel";
 export const KEYPAD_SCREEN = "main_screen";
@@ -41,7 +39,8 @@ export const AREACOLOR = {
   RAINBOW: "RAINBOW",
   CUSTOM: "CUSTOM",
 };
-export const ICONS = ["circle", "triangle", "square", "pentagon", "star", "hexagon"];
+export const ICONS = ["Circle", "Triangle", "Square", "Pentagon", "Star", "Hexagon"];
+export const COLORS = ["Red", "Green", "Blue", "Yellow", "Orange", "Pink", "Cyan", "Purple", "Brown", "Black", "Gray", "White"];
 
 export const THEME_ASSETS = {
   [THEMES.RETRO]: {

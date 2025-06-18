@@ -162,17 +162,21 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
         let areaColor = "#9b9b9b"; // Color por defecto
 
-        if (wheel.areaColor) {
+        if (wheel.areaColor || slices[i].areaColor) {
           if (iconImages["wheelImg"]) {
-            if (wheel.areaColor === AREACOLOR.RAINBOW) areaColor = `hsla(${(i * 360) / slices.length}, 100%, 50%, 0.20)`;
-            else if (slices[i].areaColor && slices[i].areaColor[0] === "#") areaColor = slices[i].areaColor + "33";
+            if (slices[i].areaColor) {
+              areaColor = withOpacity(slices[i].areaColor, 0.4);
+            }
           } else {
-            if (wheel.areaColor === AREACOLOR.RAINBOW) areaColor = `hsla(${(i * 360) / slices.length}, 100%, 50%)`;
-            else if (slices[i].areaColor && slices[i].areaColor[0] === "#") areaColor = slices[i].areaColor;
+            if (slices[i].areaColor) {
+              areaColor = withOpacity(slices[i].areaColor, 1);
+            }
           }
+
           ctx.fillStyle = areaColor;
           ctx.fill();
         }
+
         if (!iconImages["wheelImg"]) {
           ctx.fillStyle = areaColor;
           ctx.fill();
@@ -229,28 +233,45 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         // Si existe un icono pre-cargado, dibujarlo
         if (iconImages[slices[i].ico + i]) {
           ctx.drawImage(iconImages[slices[i].ico + i], -iconSize / 2, -iconSize / 2, iconSize, iconSize); // Centrado del icono
-        } else {
-          ctx.fillStyle = "white";
+        } else if (slices[i].label) {
+          ctx.fillStyle = "black";
           ctx.font = `${fontSize}px Arial`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-
-          // Medir el texto
           const text = slices[i].label;
-          const padding = 3;
-          const { width: textWidth } = ctx.measureText(text);
 
-          // Dibujar fondo negro
-          ctx.fillStyle = "black";
-          ctx.fillRect(-textWidth / 2 - padding, -fontSize / 2 - padding, textWidth + padding * 2, fontSize + padding);
+          if (iconImages["wheelImg"]) {
+            // Medir el texto
+            const padding = 6;
+            const { width: textWidth } = ctx.measureText(text);
 
-          // Dibujar texto blanco encima
-          ctx.fillStyle = "white";
+            // Dibujar fondo negro
+            ctx.fillStyle = "black";
+            ctx.fillRect(-textWidth / 2 - padding, -fontSize / 2 + padding / 10, textWidth + padding * 2, fontSize + padding);
+            // Dibujar texto blanco encima
+            ctx.fillStyle = "white";
+          }
+
           ctx.fillText(text, 0, 0);
         }
         ctx.restore();
       }
       if (draggingRef.current) getTopLabel();
+    }
+
+    function withOpacity(color, opacity = 0.2) {
+      const ctx = document.createElement("canvas").getContext("2d");
+      ctx.fillStyle = color;
+      const computed = ctx.fillStyle; // Convierte el color al formato válido
+      if (computed.startsWith("rgb")) {
+        return computed.replace("rgb", "rgba").replace(")", `, ${opacity})`);
+      }
+      return (
+        computed +
+        Math.round(opacity * 255)
+          .toString(16)
+          .padStart(2, "0")
+      ); // Para hex
     }
 
     //obtiene el label del sector del canvas que esta en la parte superior

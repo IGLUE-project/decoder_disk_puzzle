@@ -75,10 +75,10 @@ export const HexagonIcon = ({ width = 24, height = 24, color = "rgb(0, 0, 0)" })
 };
 
 export const iconMap = {
-  circle: CircleIcon,
-  triangle: TriangleIcon,
-  square: SquareIcon,
-  pentagon: PentagonIcon,
-  star: StarIcon,
-  hexagon: HexagonIcon,
+  Circle: CircleIcon,
+  Triangle: TriangleIcon,
+  Square: SquareIcon,
+  Pentagon: PentagonIcon,
+  Star: StarIcon,
+  Hexagon: HexagonIcon,
 };

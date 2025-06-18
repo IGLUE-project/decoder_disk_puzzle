@@ -46,23 +46,36 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
   }, [config]);
 
   const pedirResultados = () => {
-    const resultados = refs.current.map((ref) => ref.current?.getResult()).filter((r) => r !== undefined);
-    const resultadosObj = Object.fromEntries(resultados.map(({ id, value }) => [id, value]));
+    const resultados = refs.current.map((ref) => ref.current?.getResult()).filter(Boolean);
+
+    const resultadosObj = Object.fromEntries(
+      resultados.map(({ id, value }) => {
+        const wheelIndex = config.wheels.length - id;
+        const slice = config.wheels[wheelIndex].wheel[value];
+        const result = [slice.ico, slice.label, slice.areaColor].find((v) => v?.toString().trim());
+
+        return [wheelIndex, result];
+      })
+    );
+
     solvePuzzle(resultadosObj);
   };
 
   const setSolutions = (solutions) => {
-    const parsedSolutions = solutions
-      .split(",")
-      .map(Number)
-      .map((n) => n - 1)
-      .reverse();
+    const parsedSolutions = solutions.split(";");
     if (!refs.current) return;
+
     if (refs.current[0]) new Audio(config.winAudio).play();
+
     refs.current.forEach((ref, index) => {
-      if (ref.current) {
-        ref.current.setSolution(parsedSolutions[index]);
-      }
+      if (!ref.current) return;
+
+      const wheel = config.wheels[index].wheel;
+      const sol = parsedSolutions[index];
+
+      const id = wheel.findIndex(({ ico, label, areaColor }) => [ico, label, areaColor].includes(sol));
+
+      ref.current.setSolution(id >= 0 ? id : 0);
     });
   };
 

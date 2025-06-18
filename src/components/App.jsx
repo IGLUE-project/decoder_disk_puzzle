@@ -3,8 +3,8 @@ import "./../assets/scss/app.scss";
 import "./../assets/scss/modal.scss";
 
 import {
-  ALLOWED_ACTIONS,
   AREACOLOR,
+  COLORS,
   CONTROL_PANEL_SCREEN,
   DEFAULT_APP_SETTINGS,
   ESCAPP_CLIENT_SETTINGS,
@@ -14,8 +14,8 @@ import {
   WHEELTYPE,
 } from "../constants/constants.jsx";
 import ControlPanel from "./ControlPanel.jsx";
-import MainScreen from "./MainScreen.jsx";
 import { GlobalContext } from "./GlobalContext.jsx";
+import MainScreen from "./MainScreen.jsx";
 
 export default function App() {
   const { escapp, setEscapp, appSettings, setAppSettings, Storage, setStorage, Utils, I18n } = useContext(GlobalContext);
@@ -96,7 +96,7 @@ export default function App() {
     Utils.log("Restore application state based on escape room state:", erState);
     // Si el puzle está resuelto lo ponemos en posicion de resuelto
     if (escapp.getAllPuzzlesSolved()) {
-      if (appSettings.actionAfterSolve === "SHOW_MESSAGE") {
+      if (appSettings.actionWhenLoadingIfSolved) {
         setSolved(true);
         setSolution(erState.puzzleData[escapp.getSettings().nextPuzzleId].solution || null);
       }
@@ -115,10 +115,6 @@ export default function App() {
     // Merge _appSettings with DEFAULT_APP_SETTINGS_SKIN to obtain final app settings
     _appSettings = Utils.deepMerge(DEFAULT_APP_SETTINGS_SKIN, _appSettings);
 
-    if (!ALLOWED_ACTIONS.includes(_appSettings.actionAfterSolve)) {
-      _appSettings.actionAfterSolve = DEFAULT_APP_SETTINGS.actionAfterSolve;
-    }
-
     _appSettings.wheels = [];
     for (let i = 0; i < _appSettings.numberOfWheels; i++) {
       const wheel = _appSettings.wheelsType[i];
@@ -128,10 +124,10 @@ export default function App() {
         let wheelData;
         switch (wheel.type) {
           case WHEELTYPE.NUMBERS:
-            wheelData = (_, j) => ({ label: j + 1 });
+            wheelData = (_, j) => ({ label: String(j + 1) });
             break;
           case WHEELTYPE.COLORS:
-            wheelData = () => ({ label: "" });
+            wheelData = (_, j) => ({ areaColor: COLORS[j % COLORS.length] || "" });
             break;
           case WHEELTYPE.SHAPES:
             wheelData = (_, j) => ({ ico: ICONS[j % ICONS.length] || "" });
@@ -147,7 +143,15 @@ export default function App() {
         }
 
         if (wheel.type !== WHEELTYPE.CUSTOM) {
-          newWheel.wheel = Array.from({ length: wheel.length }, wheelData);
+          newWheel.wheel = Array.from({ length: wheel.length }, (_, j) => {
+            const base = wheelData ? wheelData(_, j) : {};
+
+            if (newWheel.areaColor === AREACOLOR.RAINBOW) {
+              base.areaColor = COLORS[j % COLORS.length] || "";
+            }
+
+            return base;
+          });
         }
         _appSettings.wheels.push(newWheel);
       } else {
@@ -189,21 +193,15 @@ export default function App() {
   }
 
   function solvePuzzle(_solution) {
-    Utils.log("solution: ", _solution);
+    const parsedSolution = Object.values(_solution).join(";");
 
-    const parsedSolution = Object.values(_solution)
-      .map((value) => value + 1)
-      .join(",");
+    Utils.log("solution: ", parsedSolution);
+
     setSolution(parsedSolution);
 
-    switch (appSettings.actionAfterSolve) {
-      case "SHOW_MESSAGE":
-        return checkResult(parsedSolution);
-      case "NONE":
-      default:
-        return submitPuzzleSolution(parsedSolution);
-    }
+    return checkResult(parsedSolution);
   }
+
   function checkResult(_solution) {
     escapp.checkNextPuzzle(_solution, {}, (success, erState) => {
       Utils.log("Check solution Escapp response", success, erState);
