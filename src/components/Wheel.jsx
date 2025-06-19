@@ -56,8 +56,12 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   const angleStep = (2 * Math.PI) / slices.length;
   const fontSize = size.width * 0.045 + idSize * 2;
   const iconSize = size.width * 0.08 + idSize * 2;
-  const labelOffset = size.width * 0.035 + idSize * size.width * 0.015;
-  const iconOffset = size.width * 0.032 + idSize * size.width * 0.0135;
+  let labelOffset = size.width * 0.035 + idSize * size.width * 0.015;
+  let iconOffset = size.width * 0.031 + idSize * size.width * 0.015;
+  if (idSize === 4) {
+    labelOffset = size.width * 0.06 + idSize * size.width * 0.015;
+    iconOffset = size.width * 0.06 + idSize * size.width * 0.0135;
+  }
 
   useImperativeHandle(ref, () => ({
     getResult: () => ({ id: config.id, value: topPosition }),
