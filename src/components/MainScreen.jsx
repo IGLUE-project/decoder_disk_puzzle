@@ -11,6 +11,7 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
   const refs = useRef(null);
   const winAudioOffset = useRef(0);
   const [refsLoaded, setRefsLoaded] = useState(0);
+  const baseSize = Math.min(size.width, size.height);
 
   useEffect(() => {
     if (solved && solution && refsLoaded) {
@@ -28,19 +29,7 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
 
   useEffect(() => {
     const handleResize = () => {
-      const windowWidth = window.innerWidth;
-      const windowHeight = window.innerHeight;
-
-      const aspectRatio = 16 / 9;
-      let width = windowWidth * 0.9;
-      let height = width / aspectRatio;
-
-      if (height > windowHeight * 0.9) {
-        height = windowHeight * 0.9;
-        width = height * aspectRatio;
-      }
-
-      setSize({ width, height });
+      setSize({ width: window.innerWidth, height: window.innerHeight });
     };
 
     handleResize();
@@ -95,8 +84,8 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
           <div
             className="wheels"
             style={{
-              width: size.height * 0.424 + size.height * 0.182 * (config.wheels.length - 1),
-              height: size.height * 0.424 + size.height * 0.182 * (config.wheels.length - 1),
+              width: baseSize * 0.4 + baseSize * 0.182 * (config.wheels.length - 1),
+              height: baseSize * 0.4 + baseSize * 0.182 * (config.wheels.length - 1),
             }}
           >
             <div className="arrow"></div>
@@ -110,8 +99,8 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
                 wheelImg={config.wheelImg}
                 config={{ id: config.wheels.length - index }}
                 size={{
-                  width: size.height * 0.424 + size.height * 0.182 * index,
-                  height: size.height * 0.424 + size.height * 0.182 * index,
+                  width: baseSize * 0.4 + baseSize * 0.182 * index,
+                  height: baseSize * 0.4 + baseSize * 0.182 * index,
                 }}
                 solved={solved}
               />
@@ -119,7 +108,7 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
             <div className="wheel_shadow" id={`wheel_shadow_${config.skin}`}></div>
             <RoundButton
               onClick={pedirResultados}
-              size={{ width: size.height * 0.242, height: size.height * 0.242 }}
+              size={{ width: baseSize * 0.242, height: baseSize * 0.242 }}
               buttonImage={config.buttonImg}
               buttonAudio={config.buttonAudio}
               solved={solved}

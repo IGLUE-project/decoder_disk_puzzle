@@ -46,7 +46,6 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   const [firstLoad, setFirstLoad] = useState(true);
   const [topPosition, setTopPosition] = useState(0);
   const [iconImages, setIconImages] = useState(null);
-  const [gameEnded, setGameEnded] = useState(false);
   const idSize = config.id + 4 - theme.wheels.length;
   const centerX = size.width / 2;
   const centerY = size.height / 2;
@@ -54,7 +53,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   const slices = wheel.wheel;
   const rotation = useRef(-Math.PI / 2); // Inicia la rotación para que el primer segmento esté arriba
   const angleStep = (2 * Math.PI) / slices.length;
-  const fontSize = size.width * 0.045 + idSize * 2;
+  const fontSize = size.width * 0.045 + idSize * 1.5;
   const iconSize = size.width * 0.08 + idSize * 2;
   let labelOffset = size.width * 0.035 + idSize * size.width * 0.015;
   let iconOffset = size.width * 0.031 + idSize * size.width * 0.015;
@@ -382,9 +381,6 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
     } else {
       if (!gameEndedRef.current) {
         gameEndedRef.current = true;
-        setTimeout(() => {
-          setGameEnded(true);
-        }, 1000);
       }
       rotation.current = angletopPosition;
     }
