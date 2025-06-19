@@ -75,7 +75,7 @@ export const THEME_ASSETS = {
     wheelImg: "images/futuristic_wheel.png",
     buttonImg: "images/futuristic_button.png",
     moveAudio: "sounds/futuristic_wheel.wav",
-    buttonAudio: "sounds/futuristic_button.mp3",
+    buttonAudio: "sounds/futuristic_button.wav",
     winAudio: "sounds/win_sound.mp3",
     repeatWheelImg: false,
   },
