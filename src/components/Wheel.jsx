@@ -54,8 +54,8 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   const rotation = useRef(-Math.PI / 2); // Inicia la rotación para que el primer segmento esté arriba
   const angleStep = (2 * Math.PI) / slices.length;
   const fontSize = size.width * 0.045 + config.id * 2;
-  const iconSize = size.width * 0.08 + config.id * 8;
-  const labelOffset = size.width * 0.04 + config.id * 6;
+  const iconSize = size.width * 0.08 + config.id * 2;
+  const labelOffset = size.width * 0.03 + config.id * size.width * 0.014;
 
   useImperativeHandle(ref, () => ({
     getResult: () => ({ id: config.id, value: topPosition }),
