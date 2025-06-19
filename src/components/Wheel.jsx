@@ -47,15 +47,17 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   const [topPosition, setTopPosition] = useState(0);
   const [iconImages, setIconImages] = useState(null);
   const [gameEnded, setGameEnded] = useState(false);
+  const idSize = config.id + 4 - theme.wheels.length;
   const centerX = size.width / 2;
   const centerY = size.height / 2;
   const radius = Math.min(centerX, centerY) - 2;
   const slices = wheel.wheel;
   const rotation = useRef(-Math.PI / 2); // Inicia la rotación para que el primer segmento esté arriba
   const angleStep = (2 * Math.PI) / slices.length;
-  const fontSize = size.width * 0.045 + config.id * 2;
-  const iconSize = size.width * 0.08 + config.id * 2;
-  const labelOffset = size.width * 0.03 + config.id * size.width * 0.014;
+  const fontSize = size.width * 0.045 + idSize * 2;
+  const iconSize = size.width * 0.08 + idSize * 2;
+  const labelOffset = size.width * 0.035 + idSize * size.width * 0.015;
+  const iconOffset = size.width * 0.032 + idSize * size.width * 0.0135;
 
   useImperativeHandle(ref, () => ({
     getResult: () => ({ id: config.id, value: topPosition }),
@@ -222,18 +224,27 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         }
         ctx.shadowBlur = 0;
         // Calcular la posición del icono o texto
-        const textX = centerX + Math.cos(midAngle) * (radius - labelOffset);
-        const textY = centerY + Math.sin(midAngle) * (radius - labelOffset);
-
-        //rotación del texto/icono
-        ctx.save();
-        ctx.translate(textX, textY);
-        ctx.rotate(midAngle + Math.PI / 2);
 
         // Si existe un icono pre-cargado, dibujarlo
         if (iconImages[slices[i].ico + i]) {
+          const iconX = centerX + Math.cos(midAngle) * (radius - iconOffset);
+          const iconY = centerY + Math.sin(midAngle) * (radius - iconOffset);
+
+          //rotación del texto/icono
+          ctx.save();
+          ctx.translate(iconX, iconY);
+          ctx.rotate(midAngle + Math.PI / 2);
+
           ctx.drawImage(iconImages[slices[i].ico + i], -iconSize / 2, -iconSize / 2, iconSize, iconSize); // Centrado del icono
         } else if (slices[i].label) {
+          const textX = centerX + Math.cos(midAngle) * (radius - labelOffset);
+          const textY = centerY + Math.sin(midAngle) * (radius - labelOffset);
+
+          //rotación del texto/icono
+          ctx.save();
+          ctx.translate(textX, textY);
+          ctx.rotate(midAngle + Math.PI / 2);
+
           ctx.fillStyle = "black";
           ctx.font = `${fontSize}px Arial`;
           ctx.textAlign = "center";
