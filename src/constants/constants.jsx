@@ -44,9 +44,9 @@ export const COLORS = ["Red", "Green", "Blue", "Yellow", "Orange", "Pink", "Cyan
 
 export const THEME_ASSETS = {
   [THEMES.RETRO]: {
-    backgroundImg: "/src/assets/images/ancient_background.png",
-    wheelImg: "/src/assets/images/ancient_wheel.png",
-    buttonImg: "/src/assets/images/ancient_button.png",
+    backgroundImg: "images/ancient_background.png",
+    wheelImg: "images/ancient_wheel.png",
+    buttonImg: "images/ancient_button.png",
     moveAudio: "sounds/ancient_wheel.flac",
     buttonAudio: "sounds/button-stone.wav",
     winAudio: "sounds/win_sound.mp3",
@@ -62,18 +62,18 @@ export const THEME_ASSETS = {
     repeatWheelImg: false,
   },
   [THEMES.BASIC]: {
-    backgroundImg: "/src/assets/images/contemporary_background.png",
-    wheelImg: "/src/assets/images/contemporary_wheel.png",
-    buttonImg: "/src/assets/images/contemporary_button.png",
+    backgroundImg: "images/contemporary_background.png",
+    wheelImg: "images/contemporary_wheel.png",
+    buttonImg: "images/contemporary_button.png",
     moveAudio: "sounds/tick.wav",
     buttonAudio: "sounds/button.mp3",
     winAudio: "sounds/win_sound.mp3",
     repeatWheelImg: true,
   },
   [THEMES.FUTURISTIC]: {
-    backgroundImg: "/src/assets/images/futuristic_background.png",
-    wheelImg: "/src/assets/images/futuristic_wheel.png",
-    buttonImg: "/src/assets/images/futuristic_button.png",
+    backgroundImg: "images/futuristic_background.png",
+    wheelImg: "images/futuristic_wheel.png",
+    buttonImg: "images/futuristic_button.png",
     moveAudio: "sounds/futuristic_wheel.wav",
     buttonAudio: "sounds/futuristic_button.mp3",
     winAudio: "sounds/win_sound.mp3",
