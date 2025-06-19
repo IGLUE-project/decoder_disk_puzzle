@@ -227,6 +227,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         }
         ctx.shadowBlur = 0;
         // Calcular la posición del icono o texto
+        ctx.save();
 
         // Si existe un icono pre-cargado, dibujarlo
         if (iconImages[slices[i].ico + i]) {
@@ -234,7 +235,6 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
           const iconY = centerY + Math.sin(midAngle) * (radius - iconOffset);
 
           //rotación del texto/icono
-          ctx.save();
           ctx.translate(iconX, iconY);
           ctx.rotate(midAngle + Math.PI / 2);
 
@@ -244,7 +244,6 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
           const textY = centerY + Math.sin(midAngle) * (radius - labelOffset);
 
           //rotación del texto/icono
-          ctx.save();
           ctx.translate(textX, textY);
           ctx.rotate(midAngle + Math.PI / 2);
 
