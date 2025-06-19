@@ -116,7 +116,7 @@ export default function App() {
     _appSettings = Utils.deepMerge(DEFAULT_APP_SETTINGS_SKIN, _appSettings);
 
     _appSettings.wheels = [];
-    for (let i = 0; i < _appSettings.numberOfWheels; i++) {
+    for (let i = _appSettings.numberOfWheels - 1; i >= 0; i--) {
       const wheel = _appSettings.wheelsType[i];
       let newWheel = wheel ? { ...wheel, wheel: [] } : null;
 
@@ -193,7 +193,7 @@ export default function App() {
   }
 
   function solvePuzzle(_solution) {
-    const parsedSolution = Object.values(_solution).join(";");
+    const parsedSolution = Object.values(_solution).reverse().join(";");
 
     Utils.log("solution: ", parsedSolution);
 

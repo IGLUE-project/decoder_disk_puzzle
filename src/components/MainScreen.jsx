@@ -60,7 +60,7 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
   };
 
   const setSolutions = (solutions) => {
-    const parsedSolutions = solutions.split(";");
+    const parsedSolutions = solutions.split(";").reverse();
     if (!refs.current) return;
 
     if (refs.current[0]) new Audio(config.winAudio).play();
