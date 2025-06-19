@@ -54,8 +54,8 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   const rotation = useRef(-Math.PI / 2); // Inicia la rotación para que el primer segmento esté arriba
   const angleStep = (2 * Math.PI) / slices.length;
   const fontSize = size.width * 0.045 + config.id * 2;
-  const iconSize = size.width * 0.1;
-  const labelOffset = size.width * 0.06 + config.id * 2;
+  const iconSize = size.width * 0.08 + config.id * 8;
+  const labelOffset = size.width * 0.04 + config.id * 6;
 
   useImperativeHandle(ref, () => ({
     getResult: () => ({ id: config.id, value: topPosition }),
@@ -247,7 +247,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
             // Dibujar fondo negro
             ctx.fillStyle = "black";
-            ctx.fillRect(-textWidth / 2 - padding, -fontSize / 2 + padding / 10, textWidth + padding * 2, fontSize + padding);
+            ctx.fillRect(-textWidth / 2 - padding, -fontSize / 2 - padding, textWidth + padding * 2, fontSize + padding);
             // Dibujar texto blanco encima
             ctx.fillStyle = "white";
           }

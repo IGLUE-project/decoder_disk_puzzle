@@ -219,11 +219,7 @@ export default function App() {
   }
   function submitPuzzleSolution(_solution) {
     Utils.log("Submit puzzle solution", _solution);
-
     escapp.submitNextPuzzle(_solution, {}, (success, erState) => {
-      if (!success) {
-        setSolved(true);
-      }
       Utils.log("Solution submitted to Escapp", _solution, success, erState);
     });
   }
