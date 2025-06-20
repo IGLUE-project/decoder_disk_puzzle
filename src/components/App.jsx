@@ -133,7 +133,7 @@ export default function App() {
             wheelData = (_, j) => ({ ico: ICONS[j % ICONS.length] || "" });
             break;
           case WHEELTYPE.COLORED_SHAPES:
-            wheelData = (_, j) => ({ ico: ICONS[j % ICONS.length] || "", colorIco: AREACOLOR.RAINBOW });
+            wheelData = (_, j) => ({ ico: ICONS[j % ICONS.length] || "", colorIco: COLORS[j % COLORS.length] });
             break;
           case WHEELTYPE.CUSTOM:
             newWheel.wheel = wheel.customWheel;

@@ -55,7 +55,22 @@ export const ICONS = [
   "Sun",
   "Rhombus",
 ];
-export const COLORS = ["Red", "Green", "Blue", "Yellow", "Orange", "Pink", "Cyan", "Purple", "Brown", "Black", "Gray", "White"];
+export const COLORS = [
+  "Red",
+  "Green",
+  "Blue",
+  "Yellow",
+  "Orange",
+  "Pink",
+  "Cyan",
+  "Purple",
+  "Brown",
+  "Black",
+  "Gray",
+  "White",
+  "Turquoise",
+  "Lime",
+];
 
 export const THEME_ASSETS = {
   [THEMES.RETRO]: {
