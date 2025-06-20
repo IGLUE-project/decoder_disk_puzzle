@@ -39,7 +39,22 @@ export const AREACOLOR = {
   RAINBOW: "RAINBOW",
   CUSTOM: "CUSTOM",
 };
-export const ICONS = ["Circle", "Triangle", "Square", "Pentagon", "Star", "Hexagon"];
+export const ICONS = [
+  "Circle",
+  "Triangle",
+  "Square",
+  "Pentagon",
+  "Star",
+  "Hexagon",
+  "Clubs",
+  "Diamonds",
+  "Hearts",
+  "Spades",
+  "Moon",
+  "Puzzle",
+  "Sun",
+  "Rhombus",
+];
 export const COLORS = ["Red", "Green", "Blue", "Yellow", "Orange", "Pink", "Cyan", "Purple", "Brown", "Black", "Gray", "White"];
 
 export const THEME_ASSETS = {
