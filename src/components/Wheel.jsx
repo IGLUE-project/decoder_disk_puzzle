@@ -170,7 +170,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
         if (wheel.areaColor || slices[i].areaColor) {
           if (iconImages["wheelImg"]) {
             if (slices[i].areaColor) {
-              areaColor = withOpacity(slices[i].areaColor, 0.4);
+              areaColor = withOpacity(slices[i].areaColor, 0.6);
             }
           } else {
             if (slices[i].areaColor) {
