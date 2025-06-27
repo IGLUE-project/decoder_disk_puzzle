@@ -55,8 +55,9 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   const angleStep = (2 * Math.PI) / slices.length;
   const fontSize = size.width * 0.045 + idSize * 1.5;
   const iconSize = size.width * 0.08 + idSize * 2;
-  let labelOffset = size.width * 0.035 + idSize * size.width * 0.015;
-  let iconOffset = size.width * 0.031 + idSize * size.width * 0.015;
+  let labelOffset = size.width * 0.04 + Math.pow(idSize, 1.3) * size.width * 0.009;
+  let iconOffset = size.width * 0.04 + Math.pow(idSize, 1.3) * size.width * 0.009;
+  console.log(iconOffset);
   if (idSize === 4) {
     labelOffset = size.width * 0.06 + idSize * size.width * 0.015;
     iconOffset = size.width * 0.06 + idSize * size.width * 0.0135;
@@ -77,8 +78,8 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
           (img) =>
             new Promise((resolve) => {
               img.onload = resolve; // Resolvemos la promesa cuando la imagen se haya cargado
-            })
-        )
+            }),
+        ),
       );
 
       // Cuando todas las imágenes se han cargado, guardamos las imágenes
@@ -260,7 +261,12 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
             // Dibujar fondo negro
             ctx.fillStyle = "black";
-            ctx.fillRect(-textWidth / 2 - padding, -fontSize / 2 - padding, textWidth + padding * 2, fontSize + padding);
+            ctx.fillRect(
+              -textWidth / 2 - padding,
+              -fontSize / 2 - padding,
+              textWidth + padding * 2,
+              fontSize + padding,
+            );
             // Dibujar texto blanco encima
             ctx.fillStyle = "white";
           }

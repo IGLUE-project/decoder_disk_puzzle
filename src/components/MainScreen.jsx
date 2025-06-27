@@ -12,6 +12,7 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
   const winAudioOffset = useRef(0);
   const [refsLoaded, setRefsLoaded] = useState(0);
   const baseSize = Math.min(size.width, size.height);
+  const wheelSize = (baseSize * 0.92) / (config.wheels.length + 1);
 
   useEffect(() => {
     if (solved && solution && refsLoaded) {
@@ -53,7 +54,7 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
         const result = [slice.ico, slice.label, slice.areaColor].find((v) => v?.toString().trim());
 
         return [wheelIndex, result];
-      })
+      }),
     );
     winAudioOffset.current = Date.now();
     solvePuzzle(resultadosObj);
@@ -84,8 +85,8 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
           <div
             className="wheels"
             style={{
-              width: baseSize * 0.4 + baseSize * 0.182 * (config.wheels.length - 1),
-              height: baseSize * 0.4 + baseSize * 0.182 * (config.wheels.length - 1),
+              width: baseSize * 0.92,
+              height: baseSize * 0.92,
             }}
           >
             <div className="arrow"></div>
@@ -99,8 +100,8 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
                 wheelImg={config.wheelImg}
                 config={{ id: config.wheels.length - index }}
                 size={{
-                  width: baseSize * 0.4 + baseSize * 0.182 * index,
-                  height: baseSize * 0.4 + baseSize * 0.182 * index,
+                  width: baseSize * 0.93 - wheelSize * (config.wheels.length - (index + 1)),
+                  height: baseSize * 0.93 - wheelSize * (config.wheels.length - (index + 1)),
                 }}
                 solved={solved}
               />
@@ -108,7 +109,7 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
             <div className="wheel_shadow" id={`wheel_shadow_${config.skin}`}></div>
             <RoundButton
               onClick={pedirResultados}
-              size={{ width: baseSize * 0.242, height: baseSize * 0.242 }}
+              size={{ width: wheelSize, height: wheelSize }}
               buttonImage={config.buttonImg}
               buttonAudio={config.buttonAudio}
               solved={solved}
