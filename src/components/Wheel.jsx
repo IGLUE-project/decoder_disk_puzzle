@@ -55,7 +55,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   const angleStep = (2 * Math.PI) / slices.length;
   const fontSize = size.width * 0.045 + idSize * 1.5;
   const iconSize = size.width * 0.08 + idSize * 2;
-  let labelOffset = size.width * 0.04 + Math.pow(idSize, 1.3) * size.width * 0.009;
+  let labelOffset = size.width * 0.045 + Math.pow(idSize, 1.3) * size.width * 0.009;
   let iconOffset = size.width * 0.04 + Math.pow(idSize, 1.3) * size.width * 0.009;
   console.log(iconOffset);
   if (idSize === 4) {
