@@ -104,6 +104,7 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
                   height: baseSize * 0.93 - wheelSize * (config.wheels.length - (index + 1)),
                 }}
                 solved={solved}
+                wheelSize={wheelSize}
               />
             ))}
             <div className="wheel_shadow" id={`wheel_shadow_${config.skin}`}></div>
