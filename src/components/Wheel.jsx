@@ -310,18 +310,26 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
       return angleB - angleA;
     }
 
-    function handleMouseDown() {
+    function handleMouseDown(e) {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = (e.clientX - rect.left) * (size.width / rect.width);
+      mouseY = (e.clientY - rect.top) * (size.height / rect.height);
       draggingRef.current = true;
     }
 
     function handleMouseMove(e) {
+      if (!draggingRef.current) return;
+
       const rect = canvas.getBoundingClientRect();
       const prevX = mouseX;
       const prevY = mouseY;
+
       mouseX = (e.clientX - rect.left) * (size.width / rect.width);
       mouseY = (e.clientY - rect.top) * (size.height / rect.height);
-      if (draggingRef.current) {
-        const angle = calcularAngulo(prevX, prevY, mouseX, mouseY);
+
+      const angle = calcularAngulo(prevX, prevY, mouseX, mouseY);
+
+      if (!isNaN(angle) && isFinite(angle)) {
         rotation.current += angle;
       }
     }
@@ -338,12 +346,12 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
     function clearEvents() {
       canvas.removeEventListener("mousedown", handleMouseDown);
-      canvas.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     }
 
     canvas.addEventListener("mousedown", handleMouseDown);
-    canvas.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
     getTopLabel();
     loop();
