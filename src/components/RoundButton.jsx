@@ -1,15 +1,18 @@
 import "./../assets/scss/RoundButton.scss";
 
-const RoundButton = ({ onClick, size, buttonImage, buttonAudio, solved }) => {
+const RoundButton = ({ onClick, size, buttonImage, buttonAudio, solved, disable }) => {
   const click = () => {
-    if (!solved) {
+    if (!solved && !disable) {
       if (buttonAudio) new Audio(buttonAudio).play();
       onClick();
     }
   };
 
   return (
-    <div className={buttonImage ? "cover image" : "cover"} style={{ width: size.width, height: size.height }}>
+    <div
+      className={(buttonImage ? "cover image" : "cover") + (disable ? " disable" : "")}
+      style={{ width: size.width, height: size.height }}
+    >
       {buttonImage ? (
         <img onClick={() => click()} src={buttonImage} alt="button" draggable={false} />
       ) : (

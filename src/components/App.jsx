@@ -5,7 +5,6 @@ import "./../assets/scss/modal.scss";
 import {
   AREACOLOR,
   COLORS,
-  CONTROL_PANEL_SCREEN,
   DEFAULT_APP_SETTINGS,
   ESCAPP_CLIENT_SETTINGS,
   ICONS,
@@ -13,12 +12,12 @@ import {
   THEME_ASSETS,
   WHEELTYPE,
 } from "../constants/constants.jsx";
-import ControlPanel from "./ControlPanel.jsx";
 import { GlobalContext } from "./GlobalContext.jsx";
 import MainScreen from "./MainScreen.jsx";
 
 export default function App() {
-  const { escapp, setEscapp, appSettings, setAppSettings, Storage, setStorage, Utils, I18n } = useContext(GlobalContext);
+  const { escapp, setEscapp, appSettings, setAppSettings, Storage, setStorage, Utils, I18n } =
+    useContext(GlobalContext);
   const hasExecutedEscappValidation = useRef(false);
 
   const [solution, setSolution] = useState(null);
@@ -94,11 +93,22 @@ export default function App() {
 
   function restoreAppState(erState) {
     Utils.log("Restore application state based on escape room state:", erState);
+    const _settings = escapp.getSettings();
+
+    if (!_settings.linkedPuzzleIds || _settings.linkedPuzzleIds.length === 0) {
+      setAppSettings((prevSettings) => {
+        return {
+          ...prevSettings,
+          disableButton: true,
+        };
+      });
+    }
+
     // Si el puzle está resuelto lo ponemos en posicion de resuelto
-    if (escapp.getAllPuzzlesSolved()) {
+    if (escapp.getAllPuzzlesSolved() && escapp.getLastSolution()) {
       if (appSettings.actionWhenLoadingIfSolved) {
         setSolved(true);
-        setSolution(erState.puzzleData[escapp.getSettings().nextPuzzleId].solution || null);
+        setSolution(escapp.getLastSolution());
       }
     }
   }
@@ -181,17 +191,6 @@ export default function App() {
     return _appSettings;
   }
 
-  function loadConfig({ config, wheels }) {
-    setScreen(KEYPAD_SCREEN);
-    let skinSettings = THEME_ASSETS[config.theme] || {};
-    let baseConfig = Utils.deepMerge(DEFAULT_APP_SETTINGS, skinSettings);
-    baseConfig.wheelsType = wheels;
-    baseConfig.skin = config.theme || "STANDARD";
-    baseConfig.numberOfWheels = config.nWheels || 3;
-    const newConfig = processAppSettings(baseConfig);
-    setAppSettings(newConfig);
-  }
-
   function solvePuzzle(_solution) {
     const parsedSolution = Object.values(_solution).reverse().join(";");
 
@@ -250,16 +249,14 @@ export default function App() {
         </div>
       ),
     },
-    {
-      id: CONTROL_PANEL_SCREEN,
-      content: <ControlPanel loadConfig={loadConfig} />,
-    },
   ];
 
   return (
     <div
       id="global_wrapper"
-      className={`${appSettings !== null && typeof appSettings.skin === "string" ? appSettings.skin.toLowerCase() : ""}`}
+      className={`${
+        appSettings !== null && typeof appSettings.skin === "string" ? appSettings.skin.toLowerCase() : ""
+      }`}
     >
       {renderScreens(screens)}
     </div>

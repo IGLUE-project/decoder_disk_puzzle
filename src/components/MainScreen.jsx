@@ -113,6 +113,7 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
               buttonImage={config.buttonImg}
               buttonAudio={config.buttonAudio}
               solved={solved}
+              disable={config.disableButton}
             />
           </div>
         )}

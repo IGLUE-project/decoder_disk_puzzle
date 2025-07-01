@@ -2,6 +2,7 @@ export const DEFAULT_APP_SETTINGS = {
   skin: "STANDARD",
   actionWhenLoadingIfSolved: true,
   message: undefined,
+  disableButton: false,
 
   backgroundImg: "",
   wheelImg: "",

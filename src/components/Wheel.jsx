@@ -57,7 +57,6 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
   const iconSize = size.width * 0.08 + idSize * 2;
   let labelOffset = size.width * 0.045 + Math.pow(idSize, 1.3) * size.width * 0.009;
   let iconOffset = size.width * 0.04 + Math.pow(idSize, 1.3) * size.width * 0.009;
-  console.log(iconOffset);
   if (idSize === 4) {
     labelOffset = size.width * 0.06 + idSize * size.width * 0.015;
     iconOffset = size.width * 0.06 + idSize * size.width * 0.0135;
