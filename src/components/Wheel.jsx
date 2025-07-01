@@ -64,7 +64,7 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
   useImperativeHandle(ref, () => ({
     getResult: () => ({ id: config.id, value: topPosition }),
-    setSolution: (solution) => endGameAnimation(solution),
+    setSolution: (solution) => endAnimation(solution),
   }));
 
   useEffect(() => {
@@ -381,24 +381,37 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
 
     return diff;
   }
+  const endPoint = useRef(false);
+  function endAnimation(_endPoint) {
+    const angletopPosition = getRotationForTopLabel(_endPoint);
+    let diff = shortestAngleDifference(rotation.current, angletopPosition);
+    if (idSize % 2 === 0) {
+      diff += Math.PI * 2; // Ajuste para que el segmento quede centrado
+    } else {
+      diff -= Math.PI * 2; // Ajuste para que el segmento quede centrado
+    }
+    endPoint.current = diff;
+    endGameAnimation(_endPoint);
+  }
 
   //Animación de fin de juego que cuadra la rueda en el punto superior correcto
-  function endGameAnimation(endPoint) {
-    const angletopPosition = getRotationForTopLabel(endPoint);
-
-    let diff = shortestAngleDifference(rotation.current, angletopPosition);
-
-    if (Math.abs(diff) > 0.01) {
-      rotation.current += Math.sign(diff) * Math.min(0.07, Math.abs(diff));
+  function endGameAnimation(_endPoint) {
+    if (Math.abs(endPoint.current) > 0.01) {
+      rotation.current += Math.sign(endPoint.current) * Math.min(0.07, Math.abs(endPoint.current));
     } else {
       if (!gameEndedRef.current) {
         gameEndedRef.current = true;
       }
-      rotation.current = angletopPosition;
+      console.log("help");
+      // rotation.current = angletopPosition;
+      rotation.current = getRotationForTopLabel(_endPoint);
     }
 
     if (!gameEndedRef.current) {
-      setTimeout(() => endGameAnimation(endPoint), 30);
+      setTimeout(() => {
+        endPoint.current -= Math.sign(endPoint.current) * Math.min(0.07, Math.abs(endPoint.current));
+        endGameAnimation(_endPoint);
+      }, 15);
     }
   }
 
