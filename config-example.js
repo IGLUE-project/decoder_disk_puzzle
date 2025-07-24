@@ -2,24 +2,18 @@
 
 export let ESCAPP_APP_SETTINGS = {
   //Settings that can be specified by the authors
-  skin: "RETRO", //skin can be "STANDARD", "RETRO" or "FUTURISTIC" or "BASIC".
+  skin: "STANDARD", //skin can be "STANDARD", "RETRO" or "FUTURISTIC" or "BASIC".
   //backgroundImg: "NONE", //background can be "NONE" or a URL.
   actionWhenLoadingIfSolved: true,
-  //message: "Custom message",
-
-  //type: can be "LETTERS", "NUMBERS", "SHAPES", "COLORED SHAPES", "COLORS", "CUSTOM".
-  //areaColor: can be a color or "RAINBOW" for a rainbow gradient.
-  //length: number of slices in the wheel.
-  numberOfWheels: 3, //number of wheels in the puzzle.
+  numberOfWheels: 3, //number of wheels of the disk
   wheelsType: [
+    {
+      type: "NUMBERS", //type: can be "LETTERS", "NUMBERS", "SHAPES", "COLORED_SHAPES", "COLORS", "CUSTOM".
+      length: 6, //length: number of slices in the wheel.
+    },
     {
       type: "COLORS",
       length: 6,
-    },
-    {
-      type: "COLORED SHAPES",
-      length: 6,
-      areaColor: "RAINBOW",
     },
     {
       type: "CUSTOM",
@@ -40,8 +34,8 @@ export let ESCAPP_APP_SETTINGS = {
   locale: "es",
 
   escappClientSettings: {
-    endpoint: "https://escapp.etsisi.upm.es/api/escapeRooms/153",
-    linkedPuzzleIds: [4],
+    endpoint: "https://escapp.es/api/escapeRooms/id",
+    linkedPuzzleIds: [1],
     rtc: false,
   },
 };

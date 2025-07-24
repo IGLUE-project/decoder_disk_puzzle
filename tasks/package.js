@@ -14,16 +14,14 @@ const build_folder = resolve(__dirname, '../dist');
 const zip_folder = resolve(__dirname, '../distZip');
 const zip_path = join(zip_folder, 'dist.zip');
 
-if (!fs.existsSync(build_folder)) {
-  console.log("❌ No build folder was found");
-  process.exit(1);
+//Remove previous folders
+if (fs.existsSync(build_folder)) {
+  fs.removeSync(build_folder);
 }
-
-//Remove previous ZIP file
 if (fs.existsSync(zip_folder)) {
   fs.removeSync(zip_folder);
 }
-
+fs.ensureDirSync(build_folder);
 fs.ensureDirSync(zip_folder);
 
 try {

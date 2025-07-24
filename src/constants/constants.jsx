@@ -3,7 +3,6 @@ export const DEFAULT_APP_SETTINGS = {
   actionWhenLoadingIfSolved: true,
   message: undefined,
   disableButton: false,
-
   backgroundImg: "",
   wheelImg: "",
   buttonImg: "",
@@ -14,48 +13,45 @@ export const DEFAULT_APP_SETTINGS = {
   wheels: [],
 };
 
-export const ESCAPP_CLIENT_SETTINGS = {
-  imagesPath: "./images/",
-};
-
-export const CONTROL_PANEL_SCREEN = "control_panel";
-export const KEYPAD_SCREEN = "main_screen";
-
 export const THEMES = {
   BASIC: "BASIC",
   FUTURISTIC: "FUTURISTIC",
   STANDARD: "STANDARD",
   RETRO: "RETRO",
 };
+
 export const WHEELTYPE = {
   LETTERS: "LETTERS",
   NUMBERS: "NUMBERS",
   SHAPES: "SHAPES",
-  COLORED_SHAPES: "COLORED SHAPES",
+  COLORED_SHAPES: "COLORED_SHAPES",
   COLORS: "COLORS",
   CUSTOM: "CUSTOM",
 };
+
 export const AREACOLOR = {
   NONE: "",
   RAINBOW: "RAINBOW",
   CUSTOM: "CUSTOM",
 };
+
 export const ICONS = [
-  "Circle",
   "Triangle",
   "Square",
-  "Pentagon",
-  "Star",
-  "Hexagon",
+  "Circle",
+  "Rhombus",
+  "Spades",
+  "Hearts",
   "Clubs",
   "Diamonds",
-  "Hearts",
-  "Spades",
+  "Star",
   "Moon",
-  "Puzzle",
   "Sun",
-  "Rhombus",
+  "Puzzle",
+  "Pentagon",
+  "Hexagon"
 ];
+
 export const COLORS = [
   "Red",
   "Green",
@@ -65,7 +61,7 @@ export const COLORS = [
   "Pink",
   "Cyan",
   "Purple",
-  "Brown",
+  "#8B4513", //brown
   "Black",
   "Gray",
   "White",
@@ -75,27 +71,24 @@ export const COLORS = [
 
 export const THEME_ASSETS = {
   [THEMES.RETRO]: {
-    backgroundImg: "images/ancient_background.png",
-    wheelImg: "images/ancient_wheel.png",
-    buttonImg: "images/ancient_button.png",
-    moveAudio: "sounds/ancient_wheel.flac",
-    buttonAudio: "sounds/button-stone.wav",
+    backgroundImg: "images/retro_background.png",
+    wheelImg: "images/retro_wheel.png",
+    buttonImg: "images/retro_button.png",
+    moveAudio: "sounds/retro_wheel.mp3",
+    buttonAudio: "sounds/retro_button.wav",
     winAudio: "sounds/win_sound.mp3",
     repeatWheelImg: false,
   },
   [THEMES.STANDARD]: {
-    backgroundImg: "",
-    wheelImg: "",
-    buttonImg: "",
     moveAudio: "sounds/tick.wav",
     buttonAudio: "sounds/button.mp3",
     winAudio: "sounds/win_sound.mp3",
     repeatWheelImg: false,
   },
   [THEMES.BASIC]: {
-    backgroundImg: "images/contemporary_background.png",
-    wheelImg: "images/contemporary_wheel.png",
-    buttonImg: "images/contemporary_button.png",
+    backgroundImg: "images/basic_background.png",
+    wheelImg: "images/basic_wheel.png",
+    buttonImg: "images/basic_button.png",
     moveAudio: "sounds/tick.wav",
     buttonAudio: "sounds/button.mp3",
     winAudio: "sounds/win_sound.mp3",
@@ -111,3 +104,9 @@ export const THEME_ASSETS = {
     repeatWheelImg: false,
   },
 };
+
+export const ESCAPP_CLIENT_SETTINGS = {
+  imagesPath: "./images/",
+};
+
+export const MAIN_SCREEN = "MAIN_SCREEN";

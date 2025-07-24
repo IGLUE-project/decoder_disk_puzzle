@@ -6,6 +6,7 @@ canvas {
     cursor: grabbing;
   }
 }
+
 .wheel_shadow {
   position: absolute;
   top: 15px;
@@ -17,6 +18,7 @@ canvas {
   mix-blend-mode: multiply;
   filter: blur(1px);
 }
+
 #wheel_shadow_BASIC {
   left: 10px;
   bottom: 35px;
@@ -29,4 +31,15 @@ canvas {
   &:active {
     cursor: auto;
   }
+}
+
+div#WheelResult {
+  background-color: rgb(54, 54, 54);
+  border: 3px solid rgb(0, 0, 0);
+  display: flex;
+  border-radius: 50%;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  font-size: 45px;
 }

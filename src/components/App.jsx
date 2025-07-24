@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import "./../assets/scss/app.scss";
-import "./../assets/scss/modal.scss";
 
 import {
   AREACOLOR,
@@ -8,7 +7,7 @@ import {
   DEFAULT_APP_SETTINGS,
   ESCAPP_CLIENT_SETTINGS,
   ICONS,
-  KEYPAD_SCREEN,
+  MAIN_SCREEN,
   THEME_ASSETS,
   WHEELTYPE,
 } from "../constants/constants.jsx";
@@ -22,7 +21,7 @@ export default function App() {
 
   const [solution, setSolution] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [screen, setScreen] = useState(KEYPAD_SCREEN);
+  const [screen, setScreen] = useState(MAIN_SCREEN);
   const prevScreen = useRef(screen);
   const [solved, setSolved] = useState(false);
 
@@ -116,6 +115,9 @@ export default function App() {
   function processAppSettings(_appSettings) {
     if (typeof _appSettings !== "object") {
       _appSettings = {};
+    }
+    if((typeof _appSettings.skin === "undefined")&&(typeof DEFAULT_APP_SETTINGS.skin === "string")){
+      _appSettings.skin = DEFAULT_APP_SETTINGS.skin;
     }
 
     let skinSettings = THEME_ASSETS[_appSettings.skin] || {};
@@ -239,7 +241,7 @@ export default function App() {
 
   let screens = [
     {
-      id: KEYPAD_SCREEN,
+      id: MAIN_SCREEN,
       content: (
         <div
           className={`main-background${solved ? " solved" : ""}`}

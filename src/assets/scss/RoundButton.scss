@@ -45,17 +45,15 @@ div.cover {
 .button:active {
   box-shadow: 0px 3px 4px #aaa inset, 0px 2px 3px #fff;
 }
-.solved div.cover,
-div.cover.disable {
-  cursor: auto;
 
+.solved div.cover, div.cover.disable {
+  cursor: auto;
   img {
     cursor: auto;
   }
   .button:active {
     box-shadow: none;
   }
-
   &.image {
     background-color: unset;
     &:active {
