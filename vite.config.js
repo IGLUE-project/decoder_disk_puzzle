@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 import react from '@vitejs/plugin-react';
 
 export default defineConfig(async ({ mode }) => {
@@ -14,7 +15,25 @@ export default defineConfig(async ({ mode }) => {
     server: {
       open: true,
     },
-    plugins: [react()],
+    plugins: [
+      react(),
+      viteStaticCopy({
+        targets: [
+          {
+            src: 'README.md',
+            dest: ''
+          },
+          {
+            src: 'package.json',
+            dest: ''
+          },
+          {
+            src: 'LICENSE',
+            dest: ''
+          }
+        ]
+      })
+    ],
     css: {
       preprocessorOptions: {
         scss: {
