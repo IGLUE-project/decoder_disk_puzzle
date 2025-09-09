@@ -402,7 +402,6 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
       if (!gameEndedRef.current) {
         gameEndedRef.current = true;
       }
-      console.log("help");
       // rotation.current = angletopPosition;
       rotation.current = getRotationForTopLabel(_endPoint);
     }
