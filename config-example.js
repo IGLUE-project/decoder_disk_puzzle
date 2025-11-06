@@ -10,7 +10,7 @@ export let ESCAPP_APP_SETTINGS = {
     {
       type: "NUMBERS", //type: can be "LETTERS", "NUMBERS", "SHAPES", "COLORED_SHAPES", "COLORS", "CUSTOM".
       length: 6, //length: number of slices in the wheel.
-      disabled: true, //disable interaction with this wheel
+      disabled: "TRUE", //disable interaction with this wheel
     },
     {
       type: "COLORS",

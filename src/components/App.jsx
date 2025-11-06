@@ -116,7 +116,7 @@ export default function App() {
     if (typeof _appSettings !== "object") {
       _appSettings = {};
     }
-    if((typeof _appSettings.skin === "undefined")&&(typeof DEFAULT_APP_SETTINGS.skin === "string")){
+    if (typeof _appSettings.skin === "undefined" && typeof DEFAULT_APP_SETTINGS.skin === "string") {
       _appSettings.skin = DEFAULT_APP_SETTINGS.skin;
     }
 
@@ -133,6 +133,7 @@ export default function App() {
       let newWheel = wheel ? { ...wheel, wheel: [] } : null;
 
       if (newWheel) {
+        newWheel.disabled = wheel.disabled === true || wheel.disabled === "TRUE";
         let wheelData;
         switch (wheel.type) {
           case WHEELTYPE.NUMBERS:
@@ -171,6 +172,7 @@ export default function App() {
           type: WHEELTYPE.LETTERS,
           length: 6,
           wheel: Array.from({ length: 6 }, (_, j) => ({ label: String.fromCharCode(65 + j) })),
+          disabled: false,
         });
       }
     }
