@@ -349,9 +349,11 @@ const Wheel = forwardRef(({ config, size, wheel, wheelImg, theme, solved }, ref)
       window.removeEventListener("mouseup", handleMouseUp);
     }
 
-    canvas.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
+    if (!wheel.disabled) {
+      canvas.addEventListener("mousedown", handleMouseDown);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    }
     getTopLabel();
     loop();
 
