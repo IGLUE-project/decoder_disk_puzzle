@@ -6,26 +6,19 @@ div#MainScreen {
     height: 100%;
     width: 100%;
   }
+
   div.wheels {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
   }
+
   div.arrow {
-    position: absolute;
-    top: -18px;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
-    border-top: 32px solid rgb(0, 0, 0);
     z-index: 100;
   }
+
   div.subarrow {
-    position: absolute;
-    top: -16px;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-top: 25px solid rgb(255, 0, 0);
     z-index: 110;
   }
 }

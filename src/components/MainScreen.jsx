@@ -90,8 +90,20 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
             }}
           >
             {!config.disableButton && <>
-              <div className="arrow"></div>
-              <div className="subarrow"></div>
+              <div style={{
+                position: "absolute",
+                top: -baseSize * 0.018 + "px",
+                borderLeft: baseSize * 0.025 + "px solid transparent",
+                borderRight: baseSize * 0.025 + "px solid transparent",
+                borderTop: baseSize * 0.038 + "px solid rgb(0, 0, 0)",
+              }} className="arrow"></div>
+              <div style={{
+                position: "absolute",
+                top: -baseSize * 0.016 + "px",
+                borderLeft: baseSize * 0.02 + "px solid transparent",
+                borderRight: baseSize * 0.02 + "px solid transparent",
+                borderTop: baseSize * 0.03 + "px solid rgb(255, 0, 0)",
+              }} className="subarrow"></div>
             </>}
             {config.wheels.map((wheel, index) => (
               <Wheel
