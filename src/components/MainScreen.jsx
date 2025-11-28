@@ -89,8 +89,10 @@ export default function MainScreen({ solvePuzzle, config, solved, solution }) {
               height: baseSize * 0.92,
             }}
           >
-            <div className="arrow"></div>
-            <div className="subarrow"></div>
+            {!config.disableButton && <>
+              <div className="arrow"></div>
+              <div className="subarrow"></div>
+            </>}
             {config.wheels.map((wheel, index) => (
               <Wheel
                 key={index}
