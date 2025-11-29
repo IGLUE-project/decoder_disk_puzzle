@@ -10,7 +10,7 @@ const RoundButton = ({ onClick, size, buttonImage, buttonAudio, solved, disable 
 
   return (
     <div
-      className={(buttonImage ? "cover image" : "cover") + (disable ? " disable" : "")}
+      className={"submitButton " + (buttonImage ? "cover image" : "cover") + (disable ? " disable" : "")}
       style={{ width: size.width, height: size.height }}
     >
       {buttonImage ? (
