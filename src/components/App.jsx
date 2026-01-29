@@ -127,6 +127,12 @@ export default function App() {
     // Merge _appSettings with DEFAULT_APP_SETTINGS_SKIN to obtain final app settings
     _appSettings = Utils.deepMerge(DEFAULT_APP_SETTINGS_SKIN, _appSettings);
 
+    //Background
+    if(_appSettings.backgroundImg === "NONE"){
+      delete _appSettings.backgroundImg;
+      _appSettings.backgroundNone = true;
+    }
+
     _appSettings.wheels = [];
     for (let i = _appSettings.numberOfWheels - 1; i >= 0; i--) {
       const wheel = _appSettings.wheelsType[i];
@@ -188,7 +194,7 @@ export default function App() {
     _appSettings = Utils.checkUrlProtocols(_appSettings);
 
     //Preload resources (if necessary)
-    Utils.preloadImages([_appSettings.backgroundMessage]);
+    //Utils.preloadImages([_appSettings.backgroundMessage]);
     //Utils.preloadAudios([_appSettings.soundBeep,_appSettings.soundNok,_appSettings.soundOk]); //Preload done through HTML audio tags
     //Utils.preloadVideos(["videos/some_video.mp4"]);
     Utils.log("App settings:", _appSettings);
@@ -246,7 +252,7 @@ export default function App() {
       id: MAIN_SCREEN,
       content: (
         <div
-          className={`main-background${solved ? " solved" : ""}`}
+          className={`main-background${solved ? " solved" : ""}${appSettings?.backgroundNone===true ? " background-none" : ""}`}
           style={{ backgroundImage: appSettings?.backgroundImg ? `url(${appSettings.backgroundImg})` : {} }}
         >
           <MainScreen solvePuzzle={solvePuzzle} config={appSettings} solved={solved} solution={solution} />

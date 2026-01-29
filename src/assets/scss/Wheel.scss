@@ -8,6 +8,12 @@ canvas {
 }
 
 .wheel_shadow {
+  display: none !important;
+  width: 0;
+  height: 0;
+}
+
+/*.wheel_shadow {
   position: absolute;
   top: 15px;
   left: -26px;
@@ -24,7 +30,7 @@ canvas {
   bottom: 35px;
   background-color: rgba(89, 90, 173, 0.527);
   filter: blur(12px);
-}
+}*/
 
 .solved canvas {
   cursor: auto;
